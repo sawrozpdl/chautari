@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Attach",
+      "type": "node",
+      "request": "attach",
+      "port": 9230,
+      "protocol": "inspector",
+      "sourceMaps": true,
+      "localRoot": "${workspaceRoot}/src",
+      "remoteRoot": "/usr/src/app",
+      "restart": true
+    }
+  ]
+}

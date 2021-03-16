@@ -1,0 +1,79 @@
+{
+  "name": "chautari-server",
+  "version": "1.0.0",
+  "description": "server module for the chautari chat application",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node dist",
+    "precommit": "lint-staged",
+    "lint": "eslint src test",
+    "lint:fix": "eslint src test --fix",
+    "prettier": "prettier --write **/*.{js,json,yml,yaml,md}",
+    "build": "rimraf dist && babel src --copy-files --out-dir dist --source-maps",
+    "start:dev": "nodemon --watch .env --watch src --exec babel-node src --source-maps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sawrozpdl/chautari.git"
+  },
+  "keywords": [
+    "chautari",
+    "chat",
+    "app",
+    "nepali",
+    "chat",
+    "online"
+  ],
+  "author": "Saroj Paudyal",
+  "license": "MIT",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ],
+    "*.{md,yml,yml,json}": [
+      "prettier --write",
+      "git add"
+    ]
+  },
+  "dependencies": {
+    "@babel/core": "^7.13.10",
+    "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.21.3",
+    "http-status-codes": "^1.4.0",
+    "lodash": "^4.17.13",
+    "mongoose": "^5.12.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.0.3",
+    "serve-favicon": "^2.5.0",
+    "socket.io": "^4.0.0",
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^3.9.0"
+  },
+  "devDependencies": {
+    "@babel/node": "^7.8.7",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/register": "^7.4.4",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "lint-staged": "^10.0.8",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.1"
+  },
+  "bugs": {
+    "url": "https://github.com/sawrozpdl/chautari/issues"
+  },
+  "homepage": "https://github.com/sawrozpdl/chautari#readme"
+}

@@ -1,0 +1,2 @@
+export const MAX_RECONNECTION_ATTEMPTS = 4;
+export const MAX_RECONNECTION_DELAY = 10000;

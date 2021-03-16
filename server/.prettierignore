@@ -1,0 +1,15 @@
+# Build directory
+dist
+build
+# Logs
+logs
+
+# Minified files
+**/*{.,-}min.js
+
+# Other
+node_modules
+
+package.json
+README.md
+*.yml

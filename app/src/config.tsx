@@ -8,9 +8,16 @@ const config: any = {
     baseUrl: process.env.REACT_APP_BASE_URL,
     name: appName,
   },
+  api: {
+    baseUrl: process.env.REACT_APP_API_BASE_URL,
+    endpoints: {
+      userSettings: '/users/:id/settings',
+      selfSettings: '/users/self/settings',
+    },
+  },
   auth: {
     api: {
-      baseUrl: process.env.REACT_APP_AUTH_BASE_URL,
+      baseUrl: process.env.REACT_APP_AUTH_API_BASE_URL,
       endpoints: {
         apps: '/apps',
         verify: '/verify',
@@ -29,7 +36,7 @@ const config: any = {
       },
     },
     app: {
-      baseUrl: process.env.REACT_APP_AUTH_APP_URL,
+      baseUrl: process.env.REACT_APP_AUTH_APP_BASE_URL,
       endpoints: {
         account: `/account?ref=${NATIVE}`,
         settings: `/settings?ref=${NATIVE}`,
