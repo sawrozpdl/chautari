@@ -1,6 +1,6 @@
 {
-  "short_name": "Hamro Auth",
-  "name": "Generic authentication module",
+  "short_name": "Chautari",
+  "name": "Online meetup and chat application",
   "icons": [
     {
       "src": "favicon.ico",
@@ -8,7 +8,7 @@
       "type": "image/x-icon"
     }
   ],
-  "start_url": "https://hamroauth.ml",
+  "start_url": "https://chautari.cf",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#ffffff"
