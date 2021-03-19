@@ -1,7 +1,8 @@
 import toast from './toast';
+import { defaultSettings } from '../constants/defaults';
 
 export const restoreSettings = () => {
-  let settings = { theme: 'DARK' };
+  let settings = defaultSettings;
 
   try {
     const storedData = localStorage.getItem('settings');

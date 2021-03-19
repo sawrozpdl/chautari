@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme: any) => ({
 const Settings = () => {
   const classes = useStyles();
   const ref = useRef(null);
-  const { settings, saveSettings } = useSettings();
+  const { settings, updateSettings } = useSettings();
   const [isOpen, setOpen] = useState(false);
   const [values, setValues] = useState({
     direction: settings.direction,
@@ -58,7 +58,7 @@ const Settings = () => {
   };
 
   const handleSave = () => {
-    saveSettings(values);
+    updateSettings(values);
     setOpen(false);
   };
 

@@ -16,6 +16,15 @@ export const capitalize = (string: string): string => {
   return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 };
 
+export const getRandomColor = (): string => {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+};
+
 export const toNormalCase = (string: string): string =>
   string
     .replace(/([A-Z])/g, ' $1')
@@ -28,7 +37,7 @@ export const extractFullName = (user: any, mid = true): string => {
   } ${lastName ? ` ${capitalize(lastName)}` : ''}`.trim();
 };
 
-export const extractInitials = (user: any, mid = true) =>
+export const extractInitials = (user: any, mid = true): string =>
   `${user.firstName ? user.firstName.charAt(0).toUpperCase() : ''}${
     mid && user.middleName ? user.middleName.charAt(0).toUpperCase() : ''
   }${user.lastName ? user.lastName.charAt(0).toUpperCase() : ''}`;
@@ -39,7 +48,7 @@ export const extractInitials = (user: any, mid = true) =>
  *
  * @param {String} query
  */
-export const parseQuery = (query: any) => {
+export const parseQuery = (query: any): any => {
   return query
     .substring(1, query.length)
     .split('&')
@@ -59,7 +68,7 @@ export const parseQuery = (query: any) => {
  *
  * @param {String} query
  */
-export const unParseQuery = (object: any) => {
+export const unParseQuery = (object: any): string => {
   return Object.keys(object)
     .reduce((acc: any, curr: any) => {
       return object[curr] ? `${acc}${curr}=${object[curr]}&` : acc;
@@ -67,7 +76,7 @@ export const unParseQuery = (object: any) => {
     .slice(0, -1);
 };
 
-const nullCounter = (obj: any) => {
+const nullCounter = (obj: any): any => {
   let keyCount = 0;
   let nullCount = 0;
   for (const key in obj) {
@@ -91,7 +100,7 @@ export const getProfileCompleteness = (user: any) => {
   return ((keyCount - nullCount) / keyCount) * 100;
 };
 
-export const downloadCsv = (rows: any, name: string) => {
+export const downloadCsv = (rows: any, name: string): void => {
   const csvContent =
     'data:text/csv;charset=utf-8,' +
     rows.map((e: string[]) => e.join(',')).join('\n');

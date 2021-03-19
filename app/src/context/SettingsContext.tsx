@@ -3,23 +3,19 @@ import React, { createContext, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
-import THEMES from '../constants/themes';
 import { storeSettings } from '../utils/settings';
+import { defaultSettings } from '../constants/defaults';
 
 const SettingsContext = createContext({});
 
-const defaultSettings = {
-  theme: THEMES.DARK,
-};
-
-export const SettingsProvider = (props: any) => {
+export const SettingsProvider = (props: any): any => {
   const { settings, children } = props;
   const [currentSettings, setCurrentSettings] = useState(
     settings || defaultSettings
   );
 
-  const handleSaveSettings = (updatedSettings = {}) => {
-    const mergedSettings = _.merge({}, currentSettings, updatedSettings);
+  const handleSettingsUpdate = (newSettings = {}): void => {
+    const mergedSettings = _.merge({}, currentSettings, newSettings);
 
     setCurrentSettings(mergedSettings);
     storeSettings(mergedSettings);
@@ -29,7 +25,7 @@ export const SettingsProvider = (props: any) => {
     <SettingsContext.Provider
       value={{
         settings: currentSettings,
-        saveSettings: handleSaveSettings,
+        updateSettings: handleSettingsUpdate,
       }}
     >
       {children}

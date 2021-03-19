@@ -1,8 +1,10 @@
 import { useContext } from 'react';
 import SettingsContext from '../context/SettingsContext';
 
-export default function useSettings() {
+const useSettings = (): any => {
   const context: any = useContext(SettingsContext);
 
   return context;
-}
+};
+
+export default useSettings;
