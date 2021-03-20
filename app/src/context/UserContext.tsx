@@ -5,19 +5,28 @@ import roles from '../constants/roles';
 const UserContext = createContext<object | null>(null);
 
 const GuestUser = {
-  id: -1,
+  id: 0,
   firstName: 'Guest',
   activeRoles: [roles.GUEST],
+  ageGroup: null,
 };
 
-const UserProvider = (props: any) => {
+const UserProvider = (props: any): any => {
   const { children } = props;
   const [activeUser, setUser] = useState(GuestUser);
-  const handleSetUser = (user: any) => {
+  const handleSetUser = (user: any, callback?: any): void => {
     setUser(user || GuestUser);
+
+    if (user && user.id) {
+      callback(user);
+    }
   };
 
-  const handleLogout = () => {
+  const handleUpdateUser = (newProps: any): void => {
+    setUser({ ...activeUser, ...newProps });
+  };
+
+  const handleLogout = (): void => {
     setUser(GuestUser);
   };
 
@@ -27,6 +36,7 @@ const UserProvider = (props: any) => {
         user: activeUser,
         logout: handleLogout,
         setUser: handleSetUser,
+        updateUser: handleUpdateUser,
       }}
     >
       {children}

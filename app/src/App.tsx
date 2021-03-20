@@ -1,27 +1,30 @@
-import { CssBaseline } from '@material-ui/core';
-import { createBrowserHistory } from 'history';
-import { Router, Switch } from 'react-router-dom';
 import React, { useEffect, useContext } from 'react';
+
+import { createBrowserHistory } from 'history';
+import { CssBaseline } from '@material-ui/core';
+import { Router, Switch } from 'react-router-dom';
 import { ThemeProvider, makeStyles } from '@material-ui/styles';
 
 import BaseRouter from './BaseRouter';
-import { fetchUser } from './services/user';
 import { createTheme } from './theme/create';
 import useSettings from './hooks/useSettings';
 import UserContext from './context/UserContext';
+import { fetchUser, syncSettings } from './services/user';
 
 const browserHistory = createBrowserHistory();
 
 const App: React.FC = () => {
   const userCtx: any = useContext(UserContext);
+  const { updateSettings } = useSettings();
   const { setUser } = userCtx;
 
   useEffect(() => {
-    fetchUser(setUser);
-    // eslint-disable-next-line
+    fetchUser(setUser, () => {
+      updateSettings(syncSettings);
+    });
   }, []);
 
-  const useStyles = makeStyles((theme: any) => ({
+  const useStyles = makeStyles(() => ({
     root: {
       display: 'flex',
       flexDirection: 'column',

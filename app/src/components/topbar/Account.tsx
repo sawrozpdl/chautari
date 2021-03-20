@@ -53,7 +53,7 @@ const Account = (props: any) => {
 
   if (!user) return <div />;
 
-  const isRegisteredUser = user.id !== -1;
+  const isRegisteredUser = Boolean(user.id);
 
   const { username } = user;
 
@@ -68,7 +68,7 @@ const Account = (props: any) => {
     }
   };
 
-  const renderUserMenuItems = () => (
+  const renderUserMenuItems = (): any => (
     <>
       {' '}
       <MenuItem onClick={redirectTo(AUTH_APP_ACCOUNT_URL, true)}>
@@ -81,7 +81,7 @@ const Account = (props: any) => {
     </>
   );
 
-  const renderGuestMenuItems = () => (
+  const renderGuestMenuItems = (): any => (
     <>
       {' '}
       <MenuItem onClick={redirectTo(AUTH_APP_LOGIN_URL)}>Login</MenuItem>

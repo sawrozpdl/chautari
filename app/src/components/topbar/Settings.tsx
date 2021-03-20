@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import {
   Badge,
   Box,
@@ -15,6 +15,7 @@ import {
 import THEMES from '../../constants/themes';
 import MenuItem from '@material-ui/core/MenuItem';
 import useSettings from '../../hooks/useSettings';
+import UserContext from '../../context/UserContext';
 import SettingsIcon from '@material-ui/icons/Settings';
 
 const useStyles = makeStyles((theme: any) => ({
@@ -35,6 +36,8 @@ const Settings = () => {
   const classes = useStyles();
   const ref = useRef(null);
   const { settings, updateSettings } = useSettings();
+  const userCtx: any = useContext(UserContext);
+  const { user } = userCtx;
   const [isOpen, setOpen] = useState(false);
   const [values, setValues] = useState({
     direction: settings.direction,
@@ -58,7 +61,7 @@ const Settings = () => {
   };
 
   const handleSave = () => {
-    updateSettings(values);
+    updateSettings(values, Boolean(user.id));
     setOpen(false);
   };
 

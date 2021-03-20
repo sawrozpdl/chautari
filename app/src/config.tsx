@@ -13,6 +13,8 @@ const config: any = {
     endpoints: {
       userSettings: '/users/:id/settings',
       selfSettings: '/users/self/settings',
+      rooms: '/rooms',
+      roomUsers: '/rooms/:roomId/users',
     },
   },
   auth: {

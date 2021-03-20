@@ -12,3 +12,7 @@ export const LOGOUT_URL = `${config.auth.api.baseUrl}${config.auth.api.endpoints
 export const AUTHENTICATE_URL = `${config.auth.api.baseUrl}${config.auth.api.endpoints.authenticate}`;
 
 export const API_BASE_URL = `${config.api.baseUrl}`;
+export const ROOMS_URL = `${config.api.baseUrl}/api${config.api.endpoints.rooms}`;
+export const ROOM_USERS_URL = `${config.api.baseUrl}/api${config.api.endpoints.roomUsers}`;
+export const USER_SETTINGS_URL = `${config.api.baseUrl}/api${config.api.endpoints.userSettings}`;
+export const SELF_SETTINGS_URL = `${config.api.baseUrl}/api${config.api.endpoints.selfSettings}`;

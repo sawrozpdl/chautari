@@ -200,7 +200,7 @@ export function createTheme(settings: any = {}): any {
   let themeConfig = themeConfigs.find((theme) => theme.name === settings.theme);
 
   if (!themeConfig) {
-    console.warn(new Error(`The theme ${settings.theme} is not valid`));
+    console.warn(new Error(`The theme ${settings.theme} doesn't exist!`));
     [themeConfig] = themeConfigs;
   }
 
