@@ -4,9 +4,8 @@ import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 
 import routes from '../constants/routes';
-import { App, Settings } from '../views';
 import { LoadingScreen } from '../components';
-import AuthCallback from '../views/AuthCallback';
+import { App, Settings, Setup } from '../views';
 
 const Topbar = React.lazy(() => import('../components/topbar'));
 
@@ -33,8 +32,8 @@ const AppRouter: React.FC<any> = (props: any) => {
       </Suspense>
       <Suspense fallback={<LoadingScreen />}>
         <Switch>
-          <Route exact path={routes.AUTH_CALLBACK} component={AuthCallback} />
           <Route exact path={routes.APP} component={App} />
+          <Route exact path={routes.SETUP} component={Setup} />
           <Route exact path={routes.SETTINGS} component={Settings} />
         </Switch>
       </Suspense>

@@ -1,8 +1,9 @@
 const routes = {
   HOME: '/',
   APP: '/app',
+  SETUP: '/app/setup',
   SETTINGS: '/app/settings',
-  AUTH_CALLBACK: '/app/auth/callback',
+  AUTH_CALLBACK: '/auth/callback',
   NOT_FOUND: '/404',
 };
 

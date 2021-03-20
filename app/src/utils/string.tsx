@@ -1,3 +1,5 @@
+import { USERNAME } from '../constants/schemas';
+
 /**
  *
  * @param {string} string
@@ -115,3 +117,22 @@ export const downloadCsv = (rows: any, name: string): void => {
 
 export const truncate = (str: string, num: number): string =>
   str.length > num ? str.slice(0, num) + '...' : str;
+
+export const isValidHttpUrl = (string: string) => {
+  let url;
+
+  try {
+    url = new URL(string);
+  } catch (_) {
+    return false;
+  }
+
+  return url.protocol === 'http:' || url.protocol === 'https:';
+};
+
+const regexMap: any = {
+  [USERNAME]: '^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._ ]+(?<![_.])$',
+};
+
+export const matches = (string: string, schema: string): boolean =>
+  Boolean(string) && new RegExp(regexMap[schema]).test(string);
