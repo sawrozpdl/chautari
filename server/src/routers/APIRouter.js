@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import { authenticateRequest } from '../services/auth';
+import { getUserSettings, syncUserSettings } from '../controllers/settings';
 
 /**
  * Router instance to hold routes for the application.
@@ -19,10 +20,7 @@ APIRouter.get('/', (req, res) => {
 
 APIRouter.use(authenticateRequest);
 
-APIRouter.get('/protected', (req, res) => {
-  res.json({
-    message: 'Hi!',
-  });
-});
+APIRouter.get('/users/:id/settings', getUserSettings);
+APIRouter.put('/users/:id/settings', syncUserSettings);
 
 export default APIRouter;

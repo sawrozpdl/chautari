@@ -40,28 +40,13 @@ const config = {
     apiKey: process.env.MAIL_SERVER_API_KEY || '',
   },
   database: {
-    client: process.env.DB_CLIENT,
-    ssl: process.env.DB_SSL === 'true',
-    port: process.env.DB_PORT,
-    host: process.env.DB_HOST,
-    name: process.env.DB_NAME,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    /**
-     * Type cast.
-     *
-     * @param {String} field
-     * @param {String} useDefaultTypeCasting
-     */
-    typeCast: function castField(field, useDefaultTypeCasting) {
-      if (field.type === 'BIT' && field.length === 1) {
-        const bytes = field.buffer();
-
-        return bytes && bytes[0] === 1;
-      }
-
-      return useDefaultTypeCasting();
-    },
+    client: process.env.DB_CLIENT || 'mongodb',
+    ssl: process.env.DB_SSL === 'true' || true,
+    port: process.env.DB_PORT || 27017,
+    host: process.env.DB_HOST || 'localhost',
+    name: process.env.DB_NAME || 'chautari-db',
+    user: process.env.DB_USER || 'saroj',
+    password: process.env.DB_PASSWORD || 'saroj',
   },
   logging: {
     dir: process.env.LOG_DIR || 'logs',

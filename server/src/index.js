@@ -9,6 +9,7 @@ import favicon from 'serve-favicon';
 import bodyParser from 'body-parser';
 import compression from 'compression';
 
+import db from './db';
 import config from './config';
 import json from './middlewares/json';
 import { attachSocket } from './socket';

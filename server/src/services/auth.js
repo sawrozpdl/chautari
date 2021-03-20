@@ -31,9 +31,10 @@ const getTokenFromHeaders = (req) => {
  */
 export async function validateUser(req) {
   const token = getTokenFromHeaders(req);
-  const { data } = await userServices.fetchUser(token);
 
-  return data;
+  const user = await userServices.fetchUser(token);
+
+  return user;
 }
 
 /**
@@ -70,7 +71,7 @@ export async function authenticateRequest(req, res, next) {
     if (error instanceof NetworkError) {
       return next(new NetworkError('Something went wrong'));
     }
-
+    
     return next(new UnauthorizedError({ message: 'Token invalid or expired' }));
   }
 }
