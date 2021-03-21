@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import {
   Container,
   Grid,
+  Divider,
   Typography,
   makeStyles,
-  Button,
 } from '@material-ui/core';
-import routes from '../../constants/routes';
+import GroupIcon from '@material-ui/icons/Group';
+import PublicIcon from '@material-ui/icons/Public';
+import AddCircleIcon from '@material-ui/icons/AddCircle';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+
+import ChipButton from '../../components/ChipButton';
+import routes, { options } from '../../constants/routes';
+import { interpolate, parseQuery } from '../../utils/string';
 
 const App: React.FC<any> = (props: any) => {
-  const { className, history, socket, ...rest } = props;
+  const { history, settings } = props;
   const useStyles = makeStyles((theme: any) => ({
     root: {
-      paddingTop: 200,
+      paddingTop: 100,
       minHeight: '100vh',
       paddingBottom: 200,
       [theme.breakpoints.down('md')]: {
@@ -23,12 +31,28 @@ const App: React.FC<any> = (props: any) => {
         paddingBottom: 60,
       },
     },
+    content: {
+      position: 'relative',
+    },
+    paperBtn: {
+      padding: '16px',
+      cursor: 'pointer',
+      opacity: '.9',
+      '&:hover': {
+        opacity: '1',
+      },
+    },
+    btnInfo: {
+      position: 'relative',
+      bottom: ' 12px',
+      left: '6px',
+    },
     paper: {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
       borderRadius: '4px',
-      padding: theme.spacing(1),
+      padding: theme.spacing(0.5),
       flexBasis: 420,
     },
     search: {
@@ -41,6 +65,16 @@ const App: React.FC<any> = (props: any) => {
       fontSize: '14px',
       lineHeight: '16px',
       letterSpacing: '-0.05px',
+    },
+    backBtn: {
+      position: 'absolute',
+      left: '64px',
+      top: '4px',
+      cursor: 'pointer',
+      '&:hover': {
+        transform: 'scale(1.1)',
+        transition: '0.2s ease',
+      },
     },
     form: {
       width: '70%',
@@ -58,6 +92,10 @@ const App: React.FC<any> = (props: any) => {
     },
     typoSend: {
       marginTop: theme.spacing(1),
+    },
+    btnGroup: {
+      textAlign: 'center',
+      marginTop: theme.spacing(2),
     },
     image: {
       perspectiveOrigin: 'left center',
@@ -84,27 +122,127 @@ const App: React.FC<any> = (props: any) => {
 
   const classes: any = useStyles();
 
+  const getQuery = useCallback(() => parseQuery(props.location.search), [
+    props.location.search,
+  ]);
+
+  const { room } = getQuery();
+
+  const isRoomMode = Boolean(room);
+
   const handleRandomChatClick = (): void => {
     history.push(routes.RANDOM_CHAT);
   };
 
+  const handleCreateRoomClick = (): void => {
+    history.push(interpolate(routes.ROOM_EDIT, { option: options.CREATE }));
+  };
+
+  const handleJoinRoomClick = (): void => {
+    history.push(interpolate(routes.ROOM_EDIT, { option: options.JOIN }));
+  };
+
+  const handleBrowseRoomClick = (): void => {
+    history.push(routes.ROOM_LIST);
+  };
+
+  const handleBackClick = (): void => {
+    history.push({
+      pathname: routes.APP,
+      search: '',
+    });
+  };
+
+  const handleRoomClick = (): void => {
+    history.push({
+      pathname: routes.APP,
+      search: '?room=true',
+    });
+  };
+
   return (
-    <div className={clsx(classes.root, className)} {...rest}>
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item lg={12} xs={12}>
-            <Typography variant="h1">{'App page!'}</Typography>
-            <Button
-              variant="outlined"
-              onClick={handleRandomChatClick}
-              color="primary"
-            >
-              Random
-            </Button>
-          </Grid>
+    <Container component="main" maxWidth="sm" className={classes.root}>
+      <div className={classes.content}>
+        <div className={classes.paper}>
+          <Typography component="h3" variant="h3">
+            {isRoomMode ? 'Socializing time!' : `Hey ${settings.nickname} !`}
+          </Typography>
+        </div>
+        <div className={classes.paper}>
+          <Typography component="h6" variant="h6" color={'primary'}>
+            {isRoomMode
+              ? 'Quite an extrovert you are'
+              : 'Choose a chatting mode to continue'}
+          </Typography>
+        </div>
+        {isRoomMode && (
+          <ArrowBackIcon
+            onClick={handleBackClick}
+            className={classes.backBtn}
+            color="inherit"
+          />
+        )}
+        <Grid container spacing={4} className={classes.btnGroup}>
+          {isRoomMode ? (
+            <>
+              <Grid item lg={6} xs={12}>
+                <ChipButton
+                  icon={AddCircleIcon}
+                  label={'Create Room'}
+                  onClick={handleCreateRoomClick}
+                  info="Create a new room and invite other people."
+                />
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <ChipButton
+                  icon={MeetingRoomIcon}
+                  label={'Join Room'}
+                  onClick={handleJoinRoomClick}
+                  info="Join a created room"
+                />
+              </Grid>
+              <Grid item lg={12} xs={12}>
+                <Divider variant="middle" />
+                {/* <Typography
+                  color="textSecondary"
+                  display="block"
+                  variant="caption"
+                >
+                  {'Or, for your convenience, we bring:'}
+                </Typography> */}
+              </Grid>
+              <Grid item lg={12} xs={12}>
+                <ChipButton
+                  icon={PublicIcon}
+                  label={'Browse public rooms'}
+                  onClick={handleBrowseRoomClick}
+                  info="Join public rooms created by other people"
+                />
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item lg={6} xs={12}>
+                <ChipButton
+                  icon={AllInclusiveIcon}
+                  label={'Random Match'}
+                  onClick={handleRandomChatClick}
+                  info="Match with random people on the web"
+                />
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <ChipButton
+                  icon={GroupIcon}
+                  label={'Room Chat'}
+                  onClick={handleRoomClick}
+                  info="Create or Join a room and chat with multiple people/invite someone as well"
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
-      </Container>
-    </div>
+      </div>
+    </Container>
   );
 };
 

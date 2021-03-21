@@ -13,4 +13,9 @@ const routes = {
   NOT_FOUND: '/404',
 };
 
-export default routes;
+const options = {
+  CREATE: 'create',
+  JOIN: 'join',
+};
+
+export { routes as default, options };

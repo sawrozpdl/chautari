@@ -103,10 +103,10 @@ const themeConfigs = [
         paper: '#282C34',
       },
       primary: {
-        main: '#bb8082',
+        main: '#8a85ff',
       },
       secondary: {
-        main: '#f48fb1',
+        main: '#8a85ff',
       },
       text: {
         primary: '#e6e5e8',

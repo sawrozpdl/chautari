@@ -75,7 +75,7 @@ const Chat: React.FC<any> = (props: any) => {
     });
 
     return (): void => {
-      socket.on(events.MESSAGE, null);
+      socket.emit(events.LEAVE_CHAT, null);
     };
   }, []);
 
@@ -120,6 +120,14 @@ const Chat: React.FC<any> = (props: any) => {
             />
           </Paper>
         </Grid>
+        <Button
+          variant="outlined"
+          onClick={handleBackClick}
+          className={classes.backBtn}
+          color="primary"
+        >
+          Back
+        </Button>
       </Container>
     </div>
   );
