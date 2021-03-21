@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Link as RouterLink } from 'react-router-dom';
 import {
-  Avatar,
   Box,
   ButtonBase,
   Hidden,
@@ -22,11 +21,13 @@ import {
   AUTH_APP_LOGIN_URL,
   AUTH_APP_REGISTER_URL,
 } from '../../constants/endpoints';
+import useSettings from '../../hooks/useSettings';
+import SmartAvatar from '../SmartAvatar';
+import { getHashAvatar } from '../../utils/user';
+import { GUEST } from '../../constants/app';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
-    height: 32,
-    width: 32,
     marginRight: theme.spacing(1),
   },
   popover: {
@@ -47,11 +48,11 @@ const Account = (props: any) => {
 
   const history = useHistory();
 
+  const { settings } = useSettings();
+
   const { user, onLogout } = props;
 
   const classes: any = useStyles();
-
-  if (!user) return <div />;
 
   const isRegisteredUser = Boolean(user.id);
 
@@ -92,7 +93,17 @@ const Account = (props: any) => {
     </>
   );
 
-  return (
+  const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl);
+
+  useEffect(() => {
+    setAvatarUrl(
+      user.avatarUrl || settings.nickname !== GUEST
+        ? getHashAvatar({ name: settings.nickname })
+        : null
+    );
+  }, [user.avatarUrl, settings.nickname]);
+
+  return user ? (
     <>
       <Box
         display="flex"
@@ -100,9 +111,14 @@ const Account = (props: any) => {
         component={ButtonBase}
         onClick={handleOpen}
       >
-        <Avatar alt="User" className={classes.avatar} src={user.avatarUrl}>
+        <SmartAvatar
+          alt="User"
+          className={classes.avatar}
+          size={32}
+          src={avatarUrl}
+        >
           {extractInitials(user, false) || 'A'}
-        </Avatar>
+        </SmartAvatar>
         <Hidden smDown>
           <Typography variant="h6" color="inherit">
             {extractFullName(user, false)}
@@ -124,6 +140,8 @@ const Account = (props: any) => {
         {isRegisteredUser ? renderUserMenuItems() : renderGuestMenuItems()}
       </Menu>
     </>
+  ) : (
+    <></>
   );
 };
 

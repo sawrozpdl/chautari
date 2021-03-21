@@ -3,9 +3,10 @@ import React, { Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { makeStyles } from '@material-ui/styles';
 
+import CoreRouter from './CoreRouter';
 import routes from '../constants/routes';
+import { Verify, Setup } from '../views';
 import { LoadingScreen } from '../components';
-import { App, Settings, Setup } from '../views';
 
 const Topbar = React.lazy(() => import('../components/topbar'));
 
@@ -32,9 +33,9 @@ const AppRouter: React.FC<any> = (props: any) => {
       </Suspense>
       <Suspense fallback={<LoadingScreen />}>
         <Switch>
-          <Route exact path={routes.APP} component={App} />
           <Route exact path={routes.SETUP} component={Setup} />
-          <Route exact path={routes.SETTINGS} component={Settings} />
+          <Route exact path={routes.VERIFY} component={Verify} />
+          <Route path={routes.APP} component={CoreRouter} />
         </Switch>
       </Suspense>
     </div>

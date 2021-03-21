@@ -1,6 +1,8 @@
 import http from 'http';
 import socket from 'socket.io';
 
+import { events } from './constants/socket';
+
 export const attachSocket = (app, callback) => {
   const io = socket({
     serveClient: false,
@@ -14,11 +16,11 @@ export const attachSocket = (app, callback) => {
     cookie: false,
   });
 
-  io.on('connection', (socket) => {
-    console.log('New user joined!');
+  io.on(events.CONNECTION, (socket) => {
+    console.log('New user joined!', socket.id);
 
-    socket.on('sendMessage', (data) => {
-      io.sockets.emit('message', data);
+    socket.on(events.SEND_MESSAGE, (data) => {
+      io.sockets.emit(events.MESSAGE, data);
     });
   });
 

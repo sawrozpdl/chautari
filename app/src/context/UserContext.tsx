@@ -17,16 +17,18 @@ const GuestUser = {
 const UserProvider = (props: any): any => {
   const { children } = props;
   const [activeUser, setUser] = useState(GuestUser);
-  const handleSetUser = (user: any, callback?: any): void => {
-    setUser(user ? { ...user, ageGroup: null } : GuestUser);
+  const handleSetUser = (newUser: any, callback?: any): void => {
+    setUser((oldUser) =>
+      oldUser ? { ...newUser, ageGroup: oldUser.ageGroup } : GuestUser
+    );
 
-    if (user && user.id) {
-      callback(user);
+    if (newUser && newUser.id) {
+      callback(newUser);
     }
   };
 
   const handleUpdateUser = (newProps: any): void => {
-    setUser({ ...activeUser, ...newProps });
+    setUser((oldUser) => ({ ...oldUser, ...newProps }));
   };
 
   const handleLogout = (): void => {

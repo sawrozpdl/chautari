@@ -2,17 +2,12 @@ import React from 'react';
 
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import {
-  Container,
-  Grid,
-  Typography,
-  makeStyles,
-  Button,
-} from '@material-ui/core';
-import routes from '../../constants/routes';
+import Button from '@material-ui/core/Button';
 
-const App: React.FC<any> = (props: any) => {
-  const { className, history, socket, ...rest } = props;
+import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
+
+const Verify: React.FC<any> = (props: any) => {
+  const { className, history, ...rest } = props;
   const useStyles = makeStyles((theme: any) => ({
     root: {
       paddingTop: 200,
@@ -27,20 +22,6 @@ const App: React.FC<any> = (props: any) => {
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      borderRadius: '4px',
-      padding: theme.spacing(1),
-      flexBasis: 420,
-    },
-    search: {
-      marginLeft: theme.spacing(1),
-      color: theme.palette.text.secondary,
-      cursor: 'pointer',
-    },
-    input: {
-      flexGrow: 1,
-      fontSize: '14px',
-      lineHeight: '16px',
-      letterSpacing: '-0.05px',
     },
     form: {
       width: '70%',
@@ -84,23 +65,25 @@ const App: React.FC<any> = (props: any) => {
 
   const classes: any = useStyles();
 
-  const handleRandomChatClick = (): void => {
-    history.push(routes.RANDOM_CHAT);
+  const handleBackClick = (): void => {
+    history.goBack();
   };
 
   return (
     <div className={clsx(classes.root, className)} {...rest}>
       <Container maxWidth="lg">
         <Grid container spacing={3}>
-          <Grid item lg={12} xs={12}>
-            <Typography variant="h1">{'App page!'}</Typography>
+          <Grid item lg={6} xs={12}>
             <Button
               variant="outlined"
-              onClick={handleRandomChatClick}
+              onClick={handleBackClick}
               color="primary"
             >
-              Random
+              Back
             </Button>
+          </Grid>
+          <Grid item lg={12} xs={12}>
+            <Typography variant="h1">{'Verification page!'}</Typography>
           </Grid>
         </Grid>
       </Container>
@@ -108,10 +91,10 @@ const App: React.FC<any> = (props: any) => {
   );
 };
 
-App.propTypes = {
+Verify.propTypes = {
   className: PropTypes.string,
   user: PropTypes.any,
   match: PropTypes.any,
 };
 
-export default App;
+export default Verify;

@@ -5,7 +5,7 @@ export const getPublicSettings = (settings: any, user: any): any => {
   const { privateMode } = settings;
 
   return {
-    settings,
+    ...settings,
     user: privateMode ? { ageGroup: user.ageGroup } : user,
   };
 };

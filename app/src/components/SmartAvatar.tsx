@@ -7,7 +7,7 @@ import { isValidHttpUrl } from '../utils/string';
 import useDebounce from '../hooks/useDebounce';
 
 const SmartAvatar = (props: any): any => {
-  const { children, src, ...rest } = props;
+  const { children, size = 50, src, ...rest } = props;
   const [blobURL, setBlobURL] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -24,9 +24,18 @@ const SmartAvatar = (props: any): any => {
 
   useDebounce(updateBlob, 1000, [src]);
 
+  const loadingSize = (size * 2) / 5;
+
   return (
-    <Avatar src={blobURL} {...rest}>
-      {loading ? <CircularProgress color="primary" /> : children}
+    <Avatar src={blobURL} {...rest} style={{ width: size, height: size }}>
+      {loading ? (
+        <CircularProgress
+          color="primary"
+          style={{ width: loadingSize, height: loadingSize }}
+        />
+      ) : (
+        children
+      )}
     </Avatar>
   );
 };

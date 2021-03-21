@@ -53,8 +53,6 @@ const Setup: React.FC<any> = (props: any) => {
       },
     },
     avatar: {
-      width: '100px',
-      height: '100px',
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(1),
     },
@@ -165,7 +163,7 @@ const Setup: React.FC<any> = (props: any) => {
           <Typography component="h1" variant="h3">
             {`Just one step, Almost there..`}
           </Typography>
-          <SmartAvatar className={classes.avatar} src={avatarUrl} />
+          <SmartAvatar className={classes.avatar} size={100} src={avatarUrl} />
           <TextField
             className={classes.textField}
             error={showError}
