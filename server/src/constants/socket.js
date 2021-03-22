@@ -15,3 +15,9 @@ export const events = {
   SERVER_INFO: 'server info',
   SEND_MESSAGE: 'send message',
 };
+
+export const userStatus = {
+  IDLE: 'IDLE',
+  IN_ROOM: 'IN_ROOM',
+  IN_RANDOM: 'IN_RANDOM',
+};
