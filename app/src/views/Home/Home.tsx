@@ -109,9 +109,9 @@ const Home: React.FC<any> = (props: any) => {
           <Grid item lg={12} xs={12}>
             <div className={classes.brand}>
               <Typography variant="h1">{'Chautari'}</Typography>
-              <span className={classes.extraInfo}>{'0.1'}</span>
+              <span className={classes.extraInfo}>{'BETA'}</span>
               <h2 className={classes.title}>
-                {'A perfect place to chat with people all over the world'}
+                {'A safe and fun place to chat with people all over the world'}
               </h2>
             </div>
           </Grid>
@@ -121,7 +121,7 @@ const Home: React.FC<any> = (props: any) => {
               onClick={handleAppLaunch}
               color="secondary"
             >
-              Launch app
+              <Typography variant="body1">{'Launch app'}</Typography>
             </Button>
           </Grid>
         </Grid>

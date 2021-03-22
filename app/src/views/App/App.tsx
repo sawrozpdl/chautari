@@ -52,7 +52,7 @@ const App: React.FC<any> = (props: any) => {
       flexDirection: 'column',
       alignItems: 'center',
       borderRadius: '4px',
-      padding: theme.spacing(0.5),
+      padding: theme.spacing(1),
       flexBasis: 420,
     },
     search: {
@@ -68,8 +68,8 @@ const App: React.FC<any> = (props: any) => {
     },
     backBtn: {
       position: 'absolute',
-      left: '64px',
-      top: '4px',
+      left: '24px',
+      top: '-8px',
       cursor: 'pointer',
       '&:hover': {
         transform: 'scale(1.1)',
@@ -95,7 +95,7 @@ const App: React.FC<any> = (props: any) => {
     },
     btnGroup: {
       textAlign: 'center',
-      marginTop: theme.spacing(2),
+      marginTop: theme.spacing(4),
     },
     image: {
       perspectiveOrigin: 'left center',
@@ -164,14 +164,14 @@ const App: React.FC<any> = (props: any) => {
     <Container component="main" maxWidth="sm" className={classes.root}>
       <div className={classes.content}>
         <div className={classes.paper}>
-          <Typography component="h3" variant="h3">
-            {isRoomMode ? 'Socializing time!' : `Hey ${settings.nickname} !`}
+          <Typography component="h1" variant="h1">
+            {isRoomMode ? 'Socializing time?' : `Hey ${settings.nickname} !`}
           </Typography>
         </div>
         <div className={classes.paper}>
-          <Typography component="h6" variant="h6" color={'primary'}>
+          <Typography component="h4" variant="h4" color={'primary'}>
             {isRoomMode
-              ? 'Quite an extrovert you are'
+              ? 'Quite an extrovert you are!'
               : 'Choose a chatting mode to continue'}
           </Typography>
         </div>
@@ -216,6 +216,7 @@ const App: React.FC<any> = (props: any) => {
                   icon={PublicIcon}
                   label={'Browse public rooms'}
                   onClick={handleBrowseRoomClick}
+                  disabled={true} //TODO
                   info="Join public rooms created by other people"
                 />
               </Grid>
@@ -233,7 +234,7 @@ const App: React.FC<any> = (props: any) => {
               <Grid item lg={6} xs={12}>
                 <ChipButton
                   icon={GroupIcon}
-                  label={'Room Chat'}
+                  label={'Chat Rooms'}
                   onClick={handleRoomClick}
                   info="Create or Join a room and chat with multiple people/invite someone as well"
                 />

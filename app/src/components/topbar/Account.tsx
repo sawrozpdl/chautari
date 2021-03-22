@@ -120,8 +120,8 @@ const Account = (props: any) => {
           {extractInitials(user, false) || 'A'}
         </SmartAvatar>
         <Hidden smDown>
-          <Typography variant="h6" color="inherit">
-            {extractFullName(user, false)}
+          <Typography variant="h5" color="inherit">
+            {settings.nickname}
           </Typography>
         </Hidden>
       </Box>

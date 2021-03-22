@@ -7,19 +7,11 @@ import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { events } from '../../constants/socket';
+import { ChatArea } from './components';
 
 const Chat: React.FC<any> = (props: any) => {
   const { className, history, socket, settings, ...rest } = props;
   const useStyles = makeStyles((theme: any) => ({
-    root: {
-      paddingTop: 200,
-      minHeight: '100vh',
-      paddingBottom: 200,
-      [theme.breakpoints.down('md')]: {
-        paddingTop: 60,
-        paddingBottom: 60,
-      },
-    },
     paper: {
       display: 'flex',
       flexDirection: 'column',
@@ -79,14 +71,17 @@ const Chat: React.FC<any> = (props: any) => {
     };
   }, []);
 
-  const [input, setInput] = useState('');
-
-  const handleMessageSend = (): void => {
+  const handleMessageSend = (message: string, callback: any): void => {
     socket.emit(events.SEND_MESSAGE, {
       user: settings.nickname,
-      data: input,
+      data: message,
+      time: Date.now(),
+      isMd: true,
     });
-    setInput('');
+
+    if (callback) {
+      callback();
+    }
   };
 
   const handleBackClick = (): void => {
@@ -94,40 +89,21 @@ const Chat: React.FC<any> = (props: any) => {
   };
 
   return (
-    <div className={clsx(classes.root, className)} {...rest}>
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
+    <div className={className} {...rest}>
+      <Container maxWidth="md">
+        <Grid container style={{ height: '80vh', marginTop: '24px' }}>
+          <Button
+            variant="outlined"
+            onClick={handleBackClick}
+            className={classes.backBtn}
+            color="primary"
+          >
+            Exit
+          </Button>
           <Grid item lg={12} xs={12}>
-            {messages.map((message, index) => (
-              <Typography
-                variant="h5"
-                key={index}
-              >{`${message.user}: ${message.data}!`}</Typography>
-            ))}
+            <ChatArea messages={messages} onSend={handleMessageSend} />
           </Grid>
-          <Paper {...rest} className={clsx(classes.paper, className)}>
-            <Input
-              {...rest}
-              className={classes.input}
-              placeholder={'Jot down your message!'}
-              disableUnderline
-              value={input}
-              onChange={(e): any => setInput(e.target.value)}
-            />
-            <ArrowForwardIcon
-              className={classes.search}
-              onClick={handleMessageSend}
-            />
-          </Paper>
         </Grid>
-        <Button
-          variant="outlined"
-          onClick={handleBackClick}
-          className={classes.backBtn}
-          color="primary"
-        >
-          Back
-        </Button>
       </Container>
     </div>
   );
