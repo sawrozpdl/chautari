@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
 import { Button, Paper, Input } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
 
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import { events } from '../../constants/socket';
 import { ChatArea } from './components';
+import { events } from '../../constants/socket';
 
-const Chat: React.FC<any> = (props: any) => {
+const RandomChat: React.FC<any> = (props: any) => {
   const { className, history, socket, settings, ...rest } = props;
   const useStyles = makeStyles((theme: any) => ({
     paper: {
@@ -109,10 +107,10 @@ const Chat: React.FC<any> = (props: any) => {
   );
 };
 
-Chat.propTypes = {
+RandomChat.propTypes = {
   className: PropTypes.string,
   user: PropTypes.any,
   match: PropTypes.any,
 };
 
-export default Chat;
+export default RandomChat;

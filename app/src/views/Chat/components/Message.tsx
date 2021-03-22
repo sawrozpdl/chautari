@@ -2,18 +2,25 @@ import React from 'react';
 import moment from 'moment';
 
 import { ListItem, Grid, ListItemText, Typography } from '@material-ui/core';
+
 import Markdown from '../../../components/Markdown';
 
 const Message = (props: any): any => {
   const { data, user, isFromSelf = true, time, isMd } = props;
   return (
     <ListItem>
-      <Grid container justify={isFromSelf ? 'flex-start' : 'flex-end'}>
-        <Grid item xs={12}>
-          <ListItemText
-            secondary={<Typography variant="caption">{user}</Typography>}
-          />
-        </Grid>
+      <Grid container style={{ textAlign: isFromSelf ? 'right' : 'left' }}>
+        {!isFromSelf && (
+          <Grid item xs={12} style={{ marginBottom: '-8px' }}>
+            <ListItemText
+              secondary={
+                <Typography variant="caption" color={'primary'}>
+                  {user}
+                </Typography>
+              }
+            />
+          </Grid>
+        )}
         <Grid item xs={12}>
           <ListItemText
             primary={
@@ -24,7 +31,7 @@ const Message = (props: any): any => {
             }
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ marginTop: '-8px' }}>
           <ListItemText
             secondary={
               <Typography variant="caption">

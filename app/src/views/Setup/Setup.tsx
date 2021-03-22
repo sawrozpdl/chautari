@@ -93,7 +93,7 @@ const Setup: React.FC<any> = (props: any) => {
   const { settings, updateSettings } = useSettings();
 
   useEffect(() => {
-    const hasSetup = settings.nickname !== GUEST;
+    const hasSetup = settings.nickname && settings.nickname !== GUEST;
 
     if (hasSetup) {
       history.push(routes.APP);

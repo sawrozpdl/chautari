@@ -13,7 +13,14 @@ import UserContext from '../context/UserContext';
 import { getPublicSettings } from '../utils/user';
 import { chatMode, GUEST } from '../constants/app';
 import { API_BASE_URL } from '../constants/endpoints';
-import { App, Settings, Chat, EditRoom, RoomList } from '../views';
+import {
+  App,
+  Settings,
+  RandomChat,
+  RoomChat,
+  EditRoom,
+  RoomList,
+} from '../views';
 
 const CoreRouter: React.FC<any> = (props: any): any => {
   const socket = useSocket(API_BASE_URL);
@@ -27,7 +34,7 @@ const CoreRouter: React.FC<any> = (props: any): any => {
 
   const userSettings = getPublicSettings(settings, user);
 
-  const hasSetup = settings.nickname !== GUEST;
+  const hasSetup = settings.nickname && settings.nickname !== GUEST;
 
   useEffect(() => {
     if (!hasSetup) {
@@ -68,7 +75,7 @@ const CoreRouter: React.FC<any> = (props: any): any => {
         <AppRoute
           exact
           path={routes.RANDOM_CHAT}
-          component={Chat}
+          component={RandomChat}
           mode={chatMode.RANDOM_CHAT}
           socket={socket}
           settings={userSettings}
@@ -76,7 +83,7 @@ const CoreRouter: React.FC<any> = (props: any): any => {
         <AppRoute
           exact
           path={routes.ROOM_CHAT}
-          component={Chat}
+          component={RoomChat}
           mode={chatMode.ROOM_CHAT}
           socket={socket}
           settings={userSettings}
