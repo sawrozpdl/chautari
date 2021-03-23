@@ -26,6 +26,7 @@ dist
 
 # Dotenv configuration
 .env
+.env.prod
 
 # Tests
 coverage

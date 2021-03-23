@@ -11,7 +11,7 @@ const config = {
     name: app.name,
     version: app.version,
     baseUrl: process.env.BASE_URL,
-    port: process.env.APP_PORT || 8080,
+    port: process.env.PORT || 8080,
     host: process.env.APP_HOST || 'localhost',
   },
   auth: {

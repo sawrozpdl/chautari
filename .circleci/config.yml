@@ -1,7 +1,63 @@
-version: 2
+version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@1.0.11
 jobs:
-  server_deploy:
-    #TODO
+  server_heroku_push:
+    docker:
+      - image: circleci/node:12.9.1
+
+    working_directory: ~/repo/server
+
+    # environment:
+    #   APP_NAME: chautari
+
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: false
+
+      - checkout:
+          path: ~/repo
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Run tests
+          command: |
+            source ~/.bashrc;
+            yarn test;
+
+      - run:
+          name: Build the app.
+          command: |
+            source ~/.bashrc;
+            yarn build;
+
+      - run:
+          name: "Heroku Install"
+          command: |
+            if [[ $(command -v heroku) == "" ]]; then
+            curl https://cli-assets.heroku.com/install.sh | sh
+            else
+            echo "Heroku already exists!"
+            fi
+      - run:
+          name: Login into Heroku Docker Repository
+          command: |
+            docker login --username=$HEROKU_LOGIN --password=$HEROKU_API_KEY registry.heroku.com
+
+      - deploy:
+          name: "Deploy Container to Heroku"
+          command: "bash scripts/deploy-server.sh"
 
   app_s3_sync:
 
@@ -36,21 +92,24 @@ jobs:
             yarn test;
 
       - run:
-          name: Sync Build Files to S3 Bucket
+          name: Build the app.
           command: |
             source ~/.bashrc;
-            sudo apt-get update && sudo apt-get install -y python-dev;
-            sudo curl -O https://bootstrap.pypa.io/get-pip.py;
-            sudo python get-pip.py;
-            sudo pip install awscli --upgrade;
             yarn build;
-            aws s3 sync build/ s3://www.chautari.cf --delete;
+      
+      - aws-s3/sync:
+          from: build
+          to: "s3://www.chautari.cf/"
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=86400"
+          overwrite: true
 
 workflows:
   version: 2
   deploy_server:
     jobs:
-      - server_deploy:
+      - server_heroku_push:
           filters:
             branches:
               only:
