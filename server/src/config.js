@@ -1,5 +1,3 @@
-const app = require('../package.json');
-
 const appName = process.env.APP_NAME;
 
 /**
@@ -8,11 +6,11 @@ const appName = process.env.APP_NAME;
 const config = {
   env: process.env.NODE_ENV || 'development',
   app: {
-    name: app.name,
-    version: app.version,
+    name: appName,
+    version: process.env.APP_VERSION,
     baseUrl: process.env.BASE_URL,
     port: process.env.PORT || 8080,
-    host: process.env.APP_HOST || 'localhost',
+    host: process.env.HOST || 'localhost',
   },
   auth: {
     api: {

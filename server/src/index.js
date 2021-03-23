@@ -51,16 +51,12 @@ server.listen(app.get('port'), app.get('host'), () => {
 process.on('unhandledRejection', (err) => {
   logger.error('Unhandled Rejection');
   logger.error(err.stack);
-
-  process.exit(1);
 });
 
 // Catch uncaught exceptions
 process.on('uncaughtException', (err) => {
   logger.error('Uncaught Exception');
   logger.error(err.stack);
-
-  process.exit(1);
 });
 
 export default app;
