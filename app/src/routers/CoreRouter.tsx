@@ -44,7 +44,7 @@ const CoreRouter: React.FC<any> = (props: any): any => {
     socket?.emit(events.HELLO, userSettings);
 
     return (): void => {
-      socket?.emit(events.BYE, true);
+      // socket?.emit(events.BYE, true);
     };
   }, [socket, hasSetup]);
 

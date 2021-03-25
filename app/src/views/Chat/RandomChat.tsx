@@ -6,6 +6,8 @@ import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { ChatArea } from './components';
 import { events } from '../../constants/socket';
+import Matching from './components/Matching';
+import ChatHalt from './components/ChatHalt';
 
 const RandomChat: React.FC<any> = (props: any) => {
   const { className, history, socket, settings, ...rest } = props;
@@ -57,25 +59,51 @@ const RandomChat: React.FC<any> = (props: any) => {
 
   const classes: any = useStyles();
 
+  const [matching, setMatching] = useState(true);
+  const [partner, setPartner] = useState(null);
+  const [roomInfo, setRoomInfo] = useState(null);
   const [messages, setMessages] = useState<Array<any>>([]);
 
   useEffect(() => {
+    socket.emit(events.JOIN_RANDOM_CHAT, {});
+
     socket.on(events.MESSAGE, (data: any) => {
       setMessages((messages) => [...messages, data]);
     });
 
+    socket.on(events.ROOM_INFO, (info: any) => {
+      setRoomInfo(info);
+    });
+
+    socket.on(events.MATCHED, (data: any) => {
+      const { partner, ...rest } = data;
+      setMatching(false);
+      setPartner(partner);
+
+      socket.emit(events.JOIN_ROOM, rest);
+    });
+
+    socket.on(events.UNMATCHED, (data: any) => {
+      setPartner(null);
+      setRoomInfo(null);
+    });
+
     return (): void => {
-      socket.emit(events.LEAVE_CHAT, null);
+      // socket.emit(events.LEAVE_RANDOM_CHAT, null);
     };
   }, []);
 
   const handleMessageSend = (message: string, callback: any): void => {
-    socket.emit(events.SEND_MESSAGE, {
+    const messageCont = {
       user: settings.nickname,
       data: message,
       time: Date.now(),
+      isFromSelf: true,
       isMd: true,
-    });
+    };
+    setMessages((messages) => [...messages, messageCont]);
+
+    socket.emit(events.SEND_MESSAGE, { ...messageCont, isFromSelf: false });
 
     if (callback) {
       callback();
@@ -86,22 +114,39 @@ const RandomChat: React.FC<any> = (props: any) => {
     history.goBack();
   };
 
+  const handleRematch = (): void => {
+    socket.emit(events.JOIN_RANDOM_CHAT, {});
+    setMessages([]);
+    setMatching(true);
+  };
+
   return (
     <div className={className} {...rest}>
       <Container maxWidth="md">
-        <Grid container style={{ height: '80vh', marginTop: '24px' }}>
-          <Button
-            variant="outlined"
-            onClick={handleBackClick}
-            className={classes.backBtn}
-            color="primary"
-          >
-            Exit
-          </Button>
-          <Grid item lg={12} xs={12}>
-            <ChatArea messages={messages} onSend={handleMessageSend} />
+        {matching ? (
+          <Matching />
+        ) : (
+          <Grid container style={{ height: '80vh', marginTop: '24px' }}>
+            <Button
+              variant="outlined"
+              onClick={handleBackClick}
+              className={classes.backBtn}
+              color="primary"
+            >
+              Exit
+            </Button>
+            <Grid item lg={12} xs={12}>
+              <ChatArea
+                messages={messages}
+                active={Boolean(partner)}
+                fallback={ChatHalt}
+                onRematch={handleRematch}
+                onBackClick={handleBackClick}
+                onSend={handleMessageSend}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Container>
     </div>
   );

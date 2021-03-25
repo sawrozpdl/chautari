@@ -1,6 +1,6 @@
 import { ANON, GUEST } from './app';
 
-export const takenNames = [GUEST, ANON, 'create', 'update', 'add'];
+export const takenNames = [GUEST, ANON, 'create', 'update', 'add', 'admin'];
 export const restrictedNames = [
   '4r5e',
   '5h1t',

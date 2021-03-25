@@ -2,25 +2,38 @@ import React, { useEffect, useState } from 'react';
 
 import SendIcon from '@material-ui/icons/Send';
 import { Button, Grid, TextField } from '@material-ui/core';
+import { chat as chatLabels } from '../../../constants/labels';
 
 import Messages from './Messages';
 import { getRandomChatGuide } from '../../../utils/chat';
 
 const ChatArea = (props: any): any => {
-  const { messages, onSend } = props;
+  const { messages, onSend, active, fallback: Fallback, ...rest } = props;
 
   const [text, setText] = useState('');
 
   const [chatGuide, setChatGuide] = useState(getRandomChatGuide());
+  const [error, setError] = useState<any>(null);
+  const [showError, setShowError] = useState<any>(false);
 
-  const handleSendClick = (): void => {
-    onSend(text, () => {
-      setText('');
-    });
+  const validate = (): boolean => {
+    let isValid = false;
+    if (!text || /^\s*$/.test(text)) {
+      setError(chatLabels.tooShort);
+    } else if (text.length > 200) {
+      setError(chatLabels.tooLong);
+    } else {
+      setError(null);
+      isValid = true;
+    }
+
+    return isValid;
   };
 
   const handleTextChange = (event: any): void => {
+    setShowError(false);
     setText(event.target.value);
+    validate();
   };
 
   useEffect((): any => {
@@ -29,31 +42,49 @@ const ChatArea = (props: any): any => {
     }
   }, [messages.length]);
 
+  const handleSendClick = (): void => {
+    const isFormValid = validate();
+    if (!isFormValid) {
+      setShowError(true);
+    } else {
+      onSend(text, () => {
+        setText('');
+      });
+    }
+  };
+
   return (
     <>
       <Messages items={messages} />
-      <Grid container style={{ padding: '20px' }} spacing={2}>
-        <Grid item xs={11}>
-          <TextField
-            id="outlined-basic-email"
-            variant="filled"
-            label={chatGuide}
-            value={text}
-            onChange={handleTextChange}
-            fullWidth
-          />
+      {active ? (
+        <Grid container style={{ padding: '20px' }} spacing={2}>
+          <Grid item xs={11}>
+            <TextField
+              id="outlined-basic-email"
+              variant="filled"
+              label={'Jot down whatever comes to mind'}
+              error={showError}
+              helperText={showError ? error : chatGuide}
+              value={text}
+              onChange={handleTextChange}
+              fullWidth
+            />
+          </Grid>
+          <Grid item xs={1}>
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled={showError}
+              style={{ height: '100%' }}
+              onClick={handleSendClick}
+            >
+              <SendIcon />
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={1}>
-          <Button
-            variant="outlined"
-            color="primary"
-            style={{ height: '100%' }}
-            onClick={handleSendClick}
-          >
-            <SendIcon />
-          </Button>
-        </Grid>
-      </Grid>
+      ) : (
+        <Fallback {...rest} />
+      )}
     </>
   );
 };

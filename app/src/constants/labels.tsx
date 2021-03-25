@@ -6,6 +6,11 @@ const form = {
   shortName: 'Invalid characters or too short name',
 };
 
+const chat = {
+  tooShort: 'Come on bruh, build up some speech lol',
+  tooLong: 'Aye man, too long, take it easy',
+};
+
 const greetings = ["We're happy to see you here!", "Heyaaa, What's poppin?"];
 
 const chatGuides = [
@@ -28,4 +33,4 @@ const chatGuides = [
   'LOL is usually what people reply with when they have nothing else to say.',
 ];
 
-export { form, greetings, chatGuides };
+export { form, greetings, chat, chatGuides };
