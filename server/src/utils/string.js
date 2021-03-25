@@ -27,8 +27,9 @@ export function getFullName(user) {
 /**
  * Returns a random hex color code.
  */
-export function getRandomColor() {
-  return '#' + Math.floor(Math.random() * 16777215).toString(16);
-}
+export const getRandomColor = () =>
+  '#' + Math.floor(Math.random() * 16777215).toString(16);
 
 export const cleanString = (string) => string.replace(/[|&;$%@"<>()+,]/g, '');
+
+export const getRandomKey = () => Math.random().toString(36).substring(2);
