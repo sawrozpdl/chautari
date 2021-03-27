@@ -82,7 +82,9 @@ const App: React.FC<any> = (props: any) => {
             </Button>
           </Grid>
           <Grid item lg={12} xs={12}>
-            <Typography variant="h1">{'Settings page!'}</Typography>
+            <Typography variant="h1">
+              {'Settings page is under construction!'}
+            </Typography>
           </Grid>
         </Grid>
       </Container>

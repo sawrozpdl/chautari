@@ -106,7 +106,7 @@ const themeConfigs = [
         main: '#8a85ff',
       },
       secondary: {
-        main: '#8a85ff',
+        main: '#f44336',
       },
       text: {
         primary: '#e6e5e8',

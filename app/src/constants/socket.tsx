@@ -1,5 +1,5 @@
-export const MAX_RECONNECTION_ATTEMPTS = 4;
-export const MAX_RECONNECTION_DELAY = 10000;
+export const MAX_RECONNECTION_ATTEMPTS = 10;
+export const MAX_RECONNECTION_DELAY = 15000;
 
 export const events = {
   BYE: 'bye',

@@ -8,6 +8,7 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
+import toast from '../../utils/toast';
 import GroupIcon from '@material-ui/icons/Group';
 import PublicIcon from '@material-ui/icons/Public';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
@@ -20,7 +21,7 @@ import routes, { options } from '../../constants/routes';
 import { interpolate, parseQuery } from '../../utils/string';
 
 const App: React.FC<any> = (props: any) => {
-  const { history, settings } = props;
+  const { history, settings, socket } = props;
   const useStyles = makeStyles((theme: any) => ({
     root: {
       paddingTop: 100,
@@ -131,6 +132,9 @@ const App: React.FC<any> = (props: any) => {
   const isRoomMode = Boolean(room);
 
   const handleRandomChatClick = (): void => {
+    if (!socket.connected) {
+      return toast.info('Unable to connect, Please try again later!');
+    }
     history.push(routes.RANDOM_CHAT);
   };
 
@@ -190,6 +194,7 @@ const App: React.FC<any> = (props: any) => {
                   icon={AddCircleIcon}
                   label={'Create Room'}
                   onClick={handleCreateRoomClick}
+                  disabled={true} //TODO
                   info="Create a new room and invite other people."
                 />
               </Grid>
@@ -198,18 +203,12 @@ const App: React.FC<any> = (props: any) => {
                   icon={MeetingRoomIcon}
                   label={'Join Room'}
                   onClick={handleJoinRoomClick}
+                  disabled={true} //TODO
                   info="Join a created room"
                 />
               </Grid>
               <Grid item lg={12} xs={12}>
                 <Divider variant="middle" />
-                {/* <Typography
-                  color="textSecondary"
-                  display="block"
-                  variant="caption"
-                >
-                  {'Or, for your convenience, we bring:'}
-                </Typography> */}
               </Grid>
               <Grid item lg={12} xs={12}>
                 <ChipButton

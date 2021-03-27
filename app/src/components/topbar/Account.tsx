@@ -15,7 +15,7 @@ import toast from '../../utils/toast';
 import routes from '../../constants/routes';
 import { redirectTo } from '../../utils/url';
 import * as authService from '../../services/auth';
-import { extractFullName, extractInitials } from '../../utils/string';
+import { extractInitials } from '../../utils/string';
 import {
   AUTH_APP_ACCOUNT_URL,
   AUTH_APP_LOGIN_URL,
@@ -35,14 +35,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Account = (props: any) => {
+const Account = (props: any): any => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleOpen = (event: any) => {
+  const handleOpen = (event: any): void => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (): void => {
     setAnchorEl(null);
   };
 
@@ -58,7 +58,7 @@ const Account = (props: any) => {
 
   const { username } = user;
 
-  const handleLogout = async () => {
+  const handleLogout = async (): Promise<void> => {
     try {
       await authService.logout(username);
       onLogout();
@@ -70,7 +70,7 @@ const Account = (props: any) => {
   };
 
   const renderUserMenuItems = (): any => (
-    <>
+    <div>
       {' '}
       <MenuItem onClick={redirectTo(AUTH_APP_ACCOUNT_URL, true)}>
         Account
@@ -79,7 +79,7 @@ const Account = (props: any) => {
         Settings
       </MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
-    </>
+    </div>
   );
 
   const renderGuestMenuItems = (): any => (
@@ -104,7 +104,7 @@ const Account = (props: any) => {
   }, [user.avatarUrl, settings.nickname]);
 
   return user ? (
-    <>
+    <div>
       <Box
         display="flex"
         alignItems="center"
@@ -139,9 +139,9 @@ const Account = (props: any) => {
       >
         {isRegisteredUser ? renderUserMenuItems() : renderGuestMenuItems()}
       </Menu>
-    </>
+    </div>
   ) : (
-    <></>
+    <div></div>
   );
 };
 

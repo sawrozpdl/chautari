@@ -8,7 +8,7 @@ import Messages from './Messages';
 import { getRandomChatGuide } from '../../../utils/chat';
 
 const ChatArea = (props: any): any => {
-  const { messages, onSend, active, fallback: Fallback, ...rest } = props;
+  const { messages, onSend, active } = props;
 
   const [text, setText] = useState('');
 
@@ -53,20 +53,27 @@ const ChatArea = (props: any): any => {
     }
   };
 
+  const handleKeyDown = (event: any): void => {
+    if (event.key === 'Enter') {
+      handleSendClick();
+    }
+  };
+
   return (
-    <>
-      <Messages items={messages} />
-      {active ? (
+    <div>
+      <Messages items={messages} extended={!active} />
+      {active && (
         <Grid container style={{ padding: '20px' }} spacing={2}>
           <Grid item xs={11}>
             <TextField
               id="outlined-basic-email"
               variant="filled"
-              label={'Jot down whatever comes to mind'}
+              label={chatGuide}
               error={showError}
-              helperText={showError ? error : chatGuide}
+              helperText={showError && error}
               value={text}
               onChange={handleTextChange}
+              onKeyDown={handleKeyDown}
               fullWidth
             />
           </Grid>
@@ -82,10 +89,8 @@ const ChatArea = (props: any): any => {
             </Button>
           </Grid>
         </Grid>
-      ) : (
-        <Fallback {...rest} />
       )}
-    </>
+    </div>
   );
 };
 

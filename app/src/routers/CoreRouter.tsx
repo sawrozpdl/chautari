@@ -3,6 +3,7 @@ import React, { Suspense, useContext, useEffect } from 'react';
 import PropType from 'prop-types';
 import { Switch, Redirect } from 'react-router-dom';
 
+import toast from '../utils/toast';
 import { useSocket } from '../hooks';
 import routes from '../constants/routes';
 import { events } from '../constants/socket';
@@ -41,7 +42,15 @@ const CoreRouter: React.FC<any> = (props: any): any => {
       return history.push(routes.SETUP);
     }
 
-    socket?.emit(events.HELLO, userSettings);
+    socket?.on(events.CONNECT, () => {
+      socket.emit(events.HELLO, userSettings);
+    });
+
+    socket?.on(events.DISCONNECT, () => {
+      toast.error('You got disconnected from the server!');
+
+      history.push(routes.APP);
+    });
 
     return (): void => {
       // socket?.emit(events.BYE, true);

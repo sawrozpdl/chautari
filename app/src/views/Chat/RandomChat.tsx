@@ -1,13 +1,22 @@
 import React, { useState, useEffect } from 'react';
 
-import { Button, Paper, Input } from '@material-ui/core';
-import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
+import {
+  Container,
+  Button,
+  Box,
+  Grid,
+  Typography,
+  makeStyles,
+} from '@material-ui/core';
 
 import PropTypes from 'prop-types';
 import { ChatArea } from './components';
-import { events } from '../../constants/socket';
+import routes from '../../constants/routes';
 import Matching from './components/Matching';
 import ChatHalt from './components/ChatHalt';
+import { events } from '../../constants/socket';
+import { getHashAvatar } from '../../utils/user';
+import SmartAvatar from '../../components/SmartAvatar';
 
 const RandomChat: React.FC<any> = (props: any) => {
   const { className, history, socket, settings, ...rest } = props;
@@ -59,10 +68,60 @@ const RandomChat: React.FC<any> = (props: any) => {
 
   const classes: any = useStyles();
 
+  const buildMessage = (text: string, isInfo = false, isMd = true) => ({
+    user: !isInfo && settings.nickname,
+    data: text,
+    isInfo,
+    time: Date.now(),
+    isFromSelf: true,
+    isMd: true,
+  });
+
   const [matching, setMatching] = useState(true);
-  const [partner, setPartner] = useState(null);
+  const [stopped, setStopped] = useState(false);
+  const [partner, setPartner] = useState<any>(null);
   const [roomInfo, setRoomInfo] = useState(null);
   const [messages, setMessages] = useState<Array<any>>([]);
+
+  const leaveChat = (): void => {
+    socket.emit(events.LEAVE_RANDOM_CHAT, {});
+  };
+
+  const joinChat = (): void => {
+    socket.emit(events.JOIN_RANDOM_CHAT, {});
+  };
+
+  const handleBackClick = (): void => {
+    if (history.length > 0) {
+      history.push(routes.APP);
+    } else history.goBack();
+  };
+
+  const handleRematch = (): void => {
+    joinChat();
+    setMessages([]);
+    setMatching(true);
+    setStopped(false);
+  };
+
+  const haltChat = (bySelf = false): void => {
+    setMessages((messages) => [
+      ...messages,
+      {
+        component: ChatHalt,
+        onRematch: handleRematch,
+        onBackClick: handleBackClick,
+        bySelf,
+      },
+    ]);
+  };
+
+  const handleStopClick = (): void => {
+    leaveChat();
+    setStopped(true);
+
+    haltChat(true);
+  };
 
   useEffect(() => {
     socket.emit(events.JOIN_RANDOM_CHAT, {});
@@ -79,28 +138,36 @@ const RandomChat: React.FC<any> = (props: any) => {
       const { partner, ...rest } = data;
       setMatching(false);
       setPartner(partner);
-
+      setStopped(false);
+      setMessages((messages) => [
+        ...messages,
+        buildMessage(`You matched with ${partner}!`, true),
+      ]);
       socket.emit(events.JOIN_ROOM, rest);
     });
 
-    socket.on(events.UNMATCHED, (data: any) => {
+    socket.on(events.UNMATCHED, () => {
       setPartner(null);
       setRoomInfo(null);
+      setStopped(true);
+      haltChat();
     });
 
     return (): void => {
-      // socket.emit(events.LEAVE_RANDOM_CHAT, null);
+      console.log('Unmounted!');
+      if (!stopped) {
+        leaveChat();
+      }
+      socket.off(events.JOIN_RANDOM_CHAT);
+      socket.off(events.MESSAGE);
+      socket.off(events.ROOM_INFO);
+      socket.off(events.MATCHED);
+      socket.off(events.UNMATCHED);
     };
   }, []);
 
   const handleMessageSend = (message: string, callback: any): void => {
-    const messageCont = {
-      user: settings.nickname,
-      data: message,
-      time: Date.now(),
-      isFromSelf: true,
-      isMd: true,
-    };
+    const messageCont = buildMessage(message);
     setMessages((messages) => [...messages, messageCont]);
 
     socket.emit(events.SEND_MESSAGE, { ...messageCont, isFromSelf: false });
@@ -110,35 +177,57 @@ const RandomChat: React.FC<any> = (props: any) => {
     }
   };
 
-  const handleBackClick = (): void => {
-    history.goBack();
-  };
-
-  const handleRematch = (): void => {
-    socket.emit(events.JOIN_RANDOM_CHAT, {});
-    setMessages([]);
-    setMatching(true);
-  };
-
   return (
     <div className={className} {...rest}>
       <Container maxWidth="md">
         {matching ? (
-          <Matching />
+          <Matching onStop={handleBackClick} />
         ) : (
           <Grid container style={{ height: '80vh', marginTop: '24px' }}>
-            <Button
-              variant="outlined"
-              onClick={handleBackClick}
-              className={classes.backBtn}
-              color="primary"
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                marginBottom: '12px',
+              }}
             >
-              Exit
-            </Button>
+              <Button
+                variant="outlined"
+                onClick={handleBackClick}
+                className={classes.backBtn}
+                color="secondary"
+              >
+                Exit
+              </Button>
+              <Box display="flex" alignItems="center">
+                <SmartAvatar
+                  alt="User"
+                  className={classes.avatar}
+                  size={32}
+                  src={getHashAvatar({ name: partner })}
+                />
+                <Typography
+                  variant="h5"
+                  color="inherit"
+                  style={{ marginLeft: '10px' }}
+                >
+                  {partner}
+                </Typography>
+              </Box>
+              <Button
+                variant="outlined"
+                onClick={stopped ? handleRematch : handleStopClick}
+                className={classes.backBtn}
+                color="primary"
+              >
+                {stopped ? 'Next' : 'Stop'}
+              </Button>
+            </div>
             <Grid item lg={12} xs={12}>
               <ChatArea
                 messages={messages}
-                active={Boolean(partner)}
+                active={Boolean(partner) && !stopped}
                 fallback={ChatHalt}
                 onRematch={handleRematch}
                 onBackClick={handleBackClick}

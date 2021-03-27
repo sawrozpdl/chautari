@@ -1,15 +1,11 @@
-import React, { useState, useEffect } from 'react';
-
-import { Button, Paper, Input } from '@material-ui/core';
-import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
+import React from 'react';
 
 import PropTypes from 'prop-types';
-import { ChatArea } from './components';
-import { events } from '../../constants/socket';
+import { Button } from '@material-ui/core';
+import { Container, Grid, makeStyles } from '@material-ui/core';
 
 const RoomChat: React.FC<any> = (props: any) => {
-  const { className, history, socket, settings, ...rest } = props;
+  const { className, history, ...rest } = props;
   const useStyles = makeStyles((theme: any) => ({
     paper: {
       display: 'flex',
@@ -57,8 +53,6 @@ const RoomChat: React.FC<any> = (props: any) => {
   }));
 
   const classes: any = useStyles();
-
-  const [messages, setMessages] = useState<Array<any>>([]);
 
   const handleBackClick = (): void => {
     history.goBack();

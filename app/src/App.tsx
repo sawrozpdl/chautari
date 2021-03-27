@@ -7,6 +7,7 @@ import { ThemeProvider, makeStyles } from '@material-ui/styles';
 
 import BaseRouter from './BaseRouter';
 import { createTheme } from './theme/create';
+import { pingServer } from './services/chat';
 import useSettings from './hooks/useSettings';
 import UserContext from './context/UserContext';
 import { fetchUser, syncSettings } from './services/user';
@@ -22,6 +23,8 @@ const App: React.FC = () => {
     fetchUser(setUser, () => {
       updateSettings(syncSettings);
     });
+
+    pingServer();
   }, []);
 
   const useStyles = makeStyles(() => ({
