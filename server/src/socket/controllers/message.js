@@ -1,6 +1,6 @@
-import { getUser } from "../models/user";
-import { notify } from "../services/notify";
-import { events } from "../../constants/socket";
+import { getUser } from '../models/user';
+import { notify } from '../services/notify';
+import { events, messageTypes } from '../../constants/socket';
 
 export const sendMessage = (data, socket) => {
   const { id: userId } = socket;

@@ -10,7 +10,7 @@ export const connect = (data, socket) => {
   registerUser(userId, data);
 };
 
-const _leaveInvolvedRoom = (userId) => {
+const _leaveInvolvedRoom = (userId, consented) => {
   const { nickname, activeRoom } = getUser(userId);
   const room = getRoom(activeRoom);
 
@@ -19,7 +19,9 @@ const _leaveInvolvedRoom = (userId) => {
   } else {
     leaveRoomForUser(activeRoom, userId, () => {
       socket.to(activeRoom).emit(events.MESSAGE, {
-        data: `${nickname} has been disconnected from the server!.`,
+        data: `${nickname} has ${
+          consented ? 'left the chat.' : 'been disconnected from the server.'
+        }`,
         user: 'Admin',
         isInfo: true,
       });
@@ -29,14 +31,14 @@ const _leaveInvolvedRoom = (userId) => {
   }
 };
 
-export const disconnect = (_, socket) => {
+export const disconnect = (_, socket, { consented }) => {
   const { id: userId } = socket;
 
   logger.info('User disconnected!', userId);
 
   logoutUser(userId, (status) => {
     if (status === userStatus.IN_ROOM) {
-      _leaveInvolvedRoom(userId);
+      _leaveInvolvedRoom(userId, consented);
     }
   });
 };

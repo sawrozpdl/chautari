@@ -110,6 +110,8 @@ workflows:
   deploy_server:
     jobs:
       - server_heroku_push:
+          context:
+            - aws
           filters:
             branches:
               only:
@@ -118,6 +120,8 @@ workflows:
   deploy_app:
     jobs:
       - app_s3_sync:
+          context:
+            - aws
           filters:
             branches:
               only:

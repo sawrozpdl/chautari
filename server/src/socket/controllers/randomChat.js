@@ -1,11 +1,12 @@
 import IO from '../../socket';
 
-import { events, userStatus } from '../../constants/socket';
 import { getRandomKey } from '../../utils/string';
 import { getUser, updateUser } from '../models/user';
+import { events, userStatus } from '../../constants/socket';
 import {
   matchOrJoinQueue,
   leaveRandomChatForUser,
+  leaveQueueForUser,
 } from '../services/randomChat';
 import { createRoom, deleteRoom, getRoom } from '../models/room';
 
@@ -40,5 +41,9 @@ export const leaveRandomChat = (data, socket) => {
 
   const roomName = getUser(userId, 'activeRoom');
 
-  leaveRandomChatForUser(roomName, userId);
+  if (roomName) {
+    leaveRandomChatForUser(roomName, userId);
+  } else {
+    leaveQueueForUser(userId);
+  }
 };

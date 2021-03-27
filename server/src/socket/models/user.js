@@ -1,12 +1,12 @@
-import { leaveQueue } from './queue';
+import logger from '../../utils/logger';
 import { removeUserFromRoom } from './room';
 import { cleanString } from '../../utils/string';
 import { userStatus } from '../../constants/socket';
+import { getQueueForUser, leaveQueue } from './queue';
 
 const users = {};
 
 const stats = {
-  total: 0,
   inQueue: 0,
   idle: 0,
   inRoom: 0,
@@ -45,20 +45,19 @@ export const updateUser = (id, curr) => {
   _updateStats(prev, curr);
 };
 
-export const logoutUser = (id, callback) => {
-  const user = users[id];
+export const logoutUser = (userId, callback) => {
+  const user = users[userId];
   if (!user) return;
   if (user.status === userStatus.IN_QUEUE) {
-    leaveQueue(getQueueForUser(user), id);
+    leaveQueue(userId);
   } else if (user.status === userStatus.IN_ROOM) {
-    removeUserFromRoom(user.activeRoom, id);
+    removeUserFromRoom(user.activeRoom, userId);
   }
 
   if (callback) callback(user.status);
-  delete users[id];
-
   stats[STATE_MAP[user.status]]--;
-  stats.total--;
+
+  delete users[userId];
 };
 
 export const getMatchPercentage = (user1, user2) => {
@@ -74,7 +73,7 @@ export const getMatchPercentage = (user1, user2) => {
     });
   });
 
-  return (matches * 2) / (user1Interests.length + user2Interests.length);
+  return (matches * 2) / (2 + user1Interests.length + user2Interests.length);
 };
 
 export const getStats = () => {

@@ -1,8 +1,9 @@
+import logger from '../../utils/logger';
 import { notify } from '../services/notify';
 import { updateUser, getUser } from '../models/user';
-import { deleteRoom, getRoom, getStats } from '../models/room';
 import { leaveRoomForUser } from '../services/roomChat';
-import { events, userStatus } from '../../constants/socket';
+import { deleteRoom, getRoom, getStats } from '../models/room';
+import { events, messageTypes, userStatus } from '../../constants/socket';
 
 export const joinRoom = (data, socket) => {
   const { id: userId } = socket;
@@ -30,6 +31,14 @@ export const joinRoom = (data, socket) => {
     return notify(userId, {
       type: messageTypes.ERROR,
       text: "That key ain't right, I am calling 911",
+      requestId: data?.requestId,
+    });
+  }
+
+  if (room.users.includes(userId)) {
+    return notify(userId, {
+      type: messageTypes.ERROR,
+      text: 'You are already in this room!',
       requestId: data?.requestId,
     });
   }

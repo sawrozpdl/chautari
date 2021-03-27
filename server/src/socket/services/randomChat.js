@@ -1,7 +1,7 @@
 import IO from '../../socket';
 
-import { events, userStatus } from '../../constants/socket';
 import { deleteRoom, getRoom } from '../models/room';
+import { events, userStatus } from '../../constants/socket';
 import { getMatchPercentage, getUser, updateUser } from '../models/user';
 import { getQueueForUser, joinQueue, leaveQueue } from '../models/queue';
 
@@ -16,7 +16,7 @@ const _findBestMatch = (id, queue) => {
   });
 
   if (bestMatch.user) {
-    leaveQueue(bestMatch.user);
+    leaveQueue(bestMatch.user, queue);
     return bestMatch.user;
   } else {
     joinQueue(queue, id);
@@ -28,7 +28,7 @@ const _findRandomMatch = (id, queue) => {
 
   if (waitingUsers.length !== 0) {
     const match = waitingUsers[0];
-    leaveQueue(queue, match);
+    leaveQueue(match, queue);
     return match;
   } else {
     joinQueue(queue, id);
@@ -48,8 +48,6 @@ export const matchOrJoinQueue = (id) => {
 };
 
 export const leaveRandomChatForUser = (roomName, userId) => {
-  if (!roomName) return;
-
   const room = getRoom(roomName);
 
   if (!room) return;
@@ -65,6 +63,14 @@ export const leaveRandomChatForUser = (roomName, userId) => {
   });
   updateUser(otherUser, {
     activeRoom: null,
+    status: userStatus.IDLE,
+  });
+};
+
+export const leaveQueueForUser = (userId) => {
+  leaveQueue(userId);
+
+  updateUser(userId, {
     status: userStatus.IDLE,
   });
 };
