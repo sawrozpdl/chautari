@@ -135,7 +135,9 @@ const RandomChat: React.FC<any> = (props: any) => {
     });
 
     socket.on(events.MATCHED, (data: any) => {
-      const { partner, ...rest } = data;
+      const { users, ...rest } = data;
+      const partner =
+        users.find((name: string) => name !== settings.nickname) || users[0];
       setMatching(false);
       setPartner(partner);
       setStopped(false);

@@ -29,7 +29,7 @@ export const joinRandomChat = (data, socket) => {
       .emit(events.MATCHED, {
         room: generatedRoomName,
         key: generatedKey,
-        partner: getUser(match, 'nickname'),
+        users: [getUser(userId, 'nickname'), getUser(match, 'nickname')],
       });
   } else {
     updateUser(userId, { status: userStatus.IN_QUEUE });
@@ -43,6 +43,7 @@ export const leaveRandomChat = (data, socket) => {
 
   if (roomName) {
     leaveRandomChatForUser(roomName, userId);
+    socket.leave(roomName);
   } else {
     leaveQueueForUser(userId);
   }

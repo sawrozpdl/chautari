@@ -119,7 +119,7 @@ const Home: React.FC<any> = (props: any) => {
             <Button
               variant="outlined"
               onClick={handleAppLaunch}
-              color="secondary"
+              color="primary"
             >
               <Typography variant="body1">{'Launch app'}</Typography>
             </Button>

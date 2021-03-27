@@ -15,7 +15,12 @@ const ChatHalt = (props: any): any => {
         {bySelf ? 'You left the chat' : 'Oh no, they left the chat'}
       </Typography>
       <div>
-        <Button variant="outlined" onClick={onRematch} color="primary">
+        <Button
+          variant="outlined"
+          onClick={onRematch}
+          color="primary"
+          style={{ marginTop: '6px' }}
+        >
           {bySelf
             ? 'tis but a start, Find next match'
             : 'No worries, Keep searching'}
@@ -24,7 +29,7 @@ const ChatHalt = (props: any): any => {
           variant="outlined"
           onClick={onBackClick}
           color="secondary"
-          style={{ marginLeft: '12px' }}
+          style={{ marginLeft: '12px', marginTop: '6px' }}
         >
           {bySelf ? "I'm done, take me out" : 'ESH, take me out'}
         </Button>

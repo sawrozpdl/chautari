@@ -63,6 +63,8 @@ export const leaveRoom = (data, socket) => {
   const roomName = getUser(userId, 'activeRoom');
 
   leaveRoomForUser(roomName, userId, () => {
+    socket.leave(roomName);
+
     socket.to(roomName).emit(events.MESSAGE, {
       data: `${getUser(userId, 'nickname')} has left the room.`,
       user: 'Admin',
