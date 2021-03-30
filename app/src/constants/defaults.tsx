@@ -12,7 +12,7 @@ export const defaultSettings = {
 
   theme: THEMES.DARK,
 
-  matchTimeout: 10, // In seconds
+  matchTimeout: 120, // In seconds
 
   privateMode: false, // Hide private info from people.
 
@@ -23,6 +23,8 @@ export const defaultSettings = {
   preferredAgeGroup: SELF_REF, // SELF_REF is same age group as self.
 
   ageGroupMatching: false,
+
+  locationMatching: false,
 
   safeMode: false, // Censor profanity and offensive languages.
 

@@ -19,7 +19,7 @@ const UserProvider = (props: any): any => {
   const [activeUser, setUser] = useState(GuestUser);
   const handleSetUser = (newUser: any, callback?: any): void => {
     setUser((oldUser) =>
-      oldUser ? { ...newUser, ageGroup: oldUser.ageGroup } : GuestUser
+      newUser ? { ...newUser, ageGroup: oldUser?.ageGroup } : GuestUser
     );
 
     if (newUser && newUser.id) {

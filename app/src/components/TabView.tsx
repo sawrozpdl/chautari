@@ -28,12 +28,17 @@ const useStyles = makeStyles((theme: any) => ({
     flexGrow: 1,
     backgroundColor: theme.palette.background.paper,
     display: 'flex',
+    paddingTop: theme.spacing(1.5),
+    paddingBottom: theme.spacing(1.5),
   },
   tabs: {
     borderRight: `1px solid ${theme.palette.divider}`,
   },
   tabContent: {
-    padding: theme.spacing(3),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
     width: '75%',
   },
 }));

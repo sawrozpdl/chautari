@@ -83,7 +83,9 @@ const Verify: React.FC<any> = (props: any) => {
             </Button>
           </Grid>
           <Grid item lg={12} xs={12}>
-            <Typography variant="h1">{'Verification page!'}</Typography>
+            <Typography variant="h1">
+              {'This page is under construction!'}
+            </Typography>
           </Grid>
         </Grid>
       </Container>

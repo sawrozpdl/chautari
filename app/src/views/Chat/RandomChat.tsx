@@ -156,7 +156,6 @@ const RandomChat: React.FC<any> = (props: any) => {
     });
 
     return (): void => {
-      console.log('Unmounted!');
       if (!stopped) {
         leaveChat();
       }
