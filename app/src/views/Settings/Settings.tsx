@@ -1,92 +1,60 @@
-import clsx from 'clsx';
-import React from 'react';
-import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
+import React, { useState } from 'react';
 
-import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
+import PropTypes from 'prop-types';
+import { Container } from '@material-ui/core';
+
+import ActionBar from './ActionBar';
+import toast from '../../utils/toast';
+import { useSettings } from '../../hooks';
+import { TabView } from '../../components';
+import { Appearance, Interests } from './pages';
+
+const items = {
+  Appearance: { component: Appearance },
+  Interests: { component: Interests },
+  User: { component: Appearance },
+  Privacy: { component: Appearance },
+  Accessibility: { component: Appearance },
+};
 
 const App: React.FC<any> = (props: any) => {
-  const { className, history, ...rest } = props;
-  const useStyles = makeStyles((theme: any) => ({
-    root: {
-      paddingTop: 200,
-      minHeight: '100vh',
-      paddingBottom: 200,
-      [theme.breakpoints.down('md')]: {
-        paddingTop: 60,
-        paddingBottom: 60,
-      },
-    },
-    paper: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    form: {
-      width: '70%',
-      marginTop: theme.spacing(1),
-      [theme.breakpoints.down('sm')]: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-      },
-    },
-    signUpButton: {
-      margin: theme.spacing(2, 0),
-    },
-    textField: {
-      marginTop: theme.spacing(2),
-    },
-    typoSend: {
-      marginTop: theme.spacing(1),
-    },
-    image: {
-      perspectiveOrigin: 'left center',
-      transformStyle: 'preserve-3d',
-      perspective: 1500,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-        transform: 'rotateY(-35deg) rotateX(15deg)',
-        backfaceVisibility: 'hidden',
-        boxShadow: theme.shadows[16],
-      },
-    },
-    shape: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-      },
-    },
-  }));
-
-  const classes: any = useStyles();
+  const { className, history } = props;
 
   const handleBackClick = (): void => {
     history.goBack();
   };
 
+  const { settings, updateSettings } = useSettings();
+  const [changed, setChanged] = useState(true);
+  const [formState, setFormState] = useState({ ...settings });
+
+  const handleChange = (key: any, value: any): void => {
+    setFormState((formState: any) => ({ ...formState, [key]: value }));
+    setChanged(true);
+  };
+
+  const handleUpdateClick = (): void => {
+    updateSettings(() => formState);
+    setChanged(false);
+
+    toast.success('Settings updated successfully!');
+  };
+
   return (
-    <div className={clsx(classes.root, className)} {...rest}>
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item lg={6} xs={12}>
-            <Button
-              variant="outlined"
-              onClick={handleBackClick}
-              color="primary"
-            >
-              Back
-            </Button>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Typography variant="h1">
-              {'Settings page is under construction!'}
-            </Typography>
-          </Grid>
-        </Grid>
+    <div className={className}>
+      <Container maxWidth="md">
+        <div style={{ marginTop: '36px' }}>
+          <ActionBar
+            changed={changed}
+            onBackClick={handleBackClick}
+            onUpdateClick={handleUpdateClick}
+          />
+          <TabView
+            items={items}
+            formState={formState}
+            onChange={handleChange}
+          />
+        </div>
       </Container>
     </div>
   );

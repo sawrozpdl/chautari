@@ -6,9 +6,19 @@ const form = {
   shortName: 'Invalid characters or too short name',
 };
 
+const generic = {
+  tooShort: 'Too short!',
+  tooLong: 'Too long!',
+};
+
 const chat = {
   tooShort: 'Come on bruh, build up some speech lol',
   tooLong: 'Aye man, too long, take it easy',
+};
+
+const interests = {
+  tooShort: 'Bro, come on, put some valid 3-50 character interest.',
+  tooLong: "Hell nah, that's too long, make it less than 50!",
 };
 
 const greetings = ["We're happy to see you here!", "Heyaaa, What's poppin?"];
@@ -33,4 +43,4 @@ const chatGuides = [
   'LOL is usually what people reply with when they have nothing else to say.',
 ];
 
-export { form, greetings, chat, chatGuides };
+export { form, generic, greetings, interests, chat, chatGuides };

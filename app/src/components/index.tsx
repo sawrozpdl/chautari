@@ -11,4 +11,4 @@ export { default as GenericMoreButton } from './GenericMoreButton';
 export { default as ItemsSelect } from './ItemsSelect';
 export { default as RadioSelect } from './RadioSelect';
 export { default as PaperCheckbox } from './PaperCheckbox';
-export { default as TabSelect } from './TabSelect';
+export { default as TabView } from './TabView';
