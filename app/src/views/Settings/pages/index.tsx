@@ -1,4 +1,5 @@
-import Appearance from './Appearance';
+import User from './User';
 import Interests from './Interests';
+import Appearance from './Appearance';
 
-export { Appearance, Interests };
+export { Appearance, User, Interests };

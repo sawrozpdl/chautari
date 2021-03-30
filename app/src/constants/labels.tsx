@@ -4,6 +4,7 @@ const form = {
   generatedAvatar: 'Your avatar image will be generated with this name',
   inappropriateName: "Oops, Looks like you can't use this name",
   shortName: 'Invalid characters or too short name',
+  longName: 'Too long name, wanna use abbreviations?',
 };
 
 const generic = {

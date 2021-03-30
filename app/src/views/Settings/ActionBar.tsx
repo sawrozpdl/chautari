@@ -3,7 +3,7 @@ import React from 'react';
 import { Button, Typography } from '@material-ui/core';
 
 const ActionBar = (props: any): any => {
-  const { onBackClick, changed, onUpdateClick } = props;
+  const { onBackClick, changed, onUpdateClick, onResetClick } = props;
 
   return (
     <div
@@ -14,22 +14,40 @@ const ActionBar = (props: any): any => {
         marginBottom: '24px',
       }}
     >
-      <Button variant="outlined" onClick={onBackClick} color="secondary">
-        Exit
-      </Button>
-      {changed && (
-        <Typography variant="subtitle1" color="textSecondary">
-          {'You have unsaved changes!'}
-        </Typography>
-      )}
-      <Button
-        variant="outlined"
-        onClick={onUpdateClick}
-        disabled={!changed}
-        color={changed ? 'primary' : 'default'}
-      >
-        Save
-      </Button>
+      <div>
+        <Button variant="outlined" onClick={onBackClick} color="secondary">
+          Exit
+        </Button>
+        {changed && (
+          <Typography
+            variant="subtitle1"
+            color="textSecondary"
+            style={{ marginLeft: '12px', display: 'inline-block' }}
+          >
+            {'You have unsaved changes !'}
+          </Typography>
+        )}
+      </div>
+      <div>
+        {changed && (
+          <Button
+            variant="outlined"
+            onClick={onResetClick}
+            color={'default'}
+            style={{ marginLeft: '12px', marginRight: '12px' }}
+          >
+            Reset
+          </Button>
+        )}
+        <Button
+          variant="outlined"
+          onClick={onUpdateClick}
+          disabled={!changed}
+          color={'primary'}
+        >
+          Save
+        </Button>
+      </div>
     </div>
   );
 };

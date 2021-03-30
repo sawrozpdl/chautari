@@ -123,9 +123,10 @@ const Setup: React.FC<any> = (props: any) => {
   const validate = (): boolean => {
     const { nickname } = values;
     let isValid = false;
-    if (takenNames.includes(nickname) || restrictedNames.includes(nickname)) {
+    const toTest = nickname && nickname.trim();
+    if (takenNames.includes(toTest) || restrictedNames.includes(toTest)) {
       setErrors({ ...errors, nickname: messages.inappropriateName });
-    } else if (!matches(nickname, USERNAME)) {
+    } else if (!matches(toTest, USERNAME)) {
       setErrors({ ...errors, nickname: messages.shortName });
     } else {
       setErrors({});
@@ -140,7 +141,7 @@ const Setup: React.FC<any> = (props: any) => {
     setShowError(false);
     setValues({
       ...values,
-      [event.target.name]: event.target.value || event.target.checked,
+      [event.target.name]: event.target.value?.trim() || event.target.checked,
     });
     validate();
   };

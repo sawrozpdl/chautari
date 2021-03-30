@@ -136,3 +136,15 @@ const regexMap: any = {
 
 export const matches = (string: string, schema: string): boolean =>
   Boolean(string) && new RegExp(regexMap[schema]).test(string);
+
+export const getInverseColor = (
+  fore: string,
+  { black = '#000000', white = '#ffffff' }
+): string => {
+  fore = fore.replace('#', '');
+  const r = parseInt(fore.substr(0, 2), 16);
+  const g = parseInt(fore.substr(2, 2), 16);
+  const b = parseInt(fore.substr(4, 2), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? black : white;
+};

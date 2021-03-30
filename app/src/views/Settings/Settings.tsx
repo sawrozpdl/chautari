@@ -7,12 +7,12 @@ import ActionBar from './ActionBar';
 import toast from '../../utils/toast';
 import { useSettings } from '../../hooks';
 import { TabView } from '../../components';
-import { Appearance, Interests } from './pages';
+import { Appearance, Interests, User } from './pages';
 
 const items = {
+  User: { component: User },
   Appearance: { component: Appearance },
   Interests: { component: Interests },
-  User: { component: Appearance },
   Privacy: { component: Appearance },
   Accessibility: { component: Appearance },
 };
@@ -25,7 +25,7 @@ const App: React.FC<any> = (props: any) => {
   };
 
   const { settings, updateSettings } = useSettings();
-  const [changed, setChanged] = useState(true);
+  const [changed, setChanged] = useState(false);
   const [formState, setFormState] = useState({ ...settings });
 
   const handleChange = (key: any, value: any): void => {
@@ -40,6 +40,11 @@ const App: React.FC<any> = (props: any) => {
     toast.success('Settings updated successfully!');
   };
 
+  const handleResetClick = (): void => {
+    setFormState({ ...settings });
+    setChanged(false);
+  };
+
   return (
     <div className={className}>
       <Container maxWidth="md">
@@ -47,6 +52,7 @@ const App: React.FC<any> = (props: any) => {
           <ActionBar
             changed={changed}
             onBackClick={handleBackClick}
+            onResetClick={handleResetClick}
             onUpdateClick={handleUpdateClick}
           />
           <TabView
