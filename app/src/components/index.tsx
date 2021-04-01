@@ -13,4 +13,5 @@ export { default as StatusBullet } from './StatusBullet';
 export { default as GenericTable } from './GenericTable';
 export { default as LoadingScreen } from './LoadingScreen';
 export { default as PaperCheckbox } from './PaperCheckbox';
+export { default as TooltipTruncate } from './TooltipTruncate';
 export { default as GenericMoreButton } from './GenericMoreButton';

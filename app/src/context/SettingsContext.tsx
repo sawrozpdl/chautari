@@ -31,9 +31,7 @@ export const SettingsProvider = (props: any): any => {
     newSettings = {},
     syncToDb = false
   ): Promise<void> => {
-    const mergedSettings = _.merge({}, currentSettings, newSettings);
-
-    await setSettings({ ...mergedSettings, timestamp: Date.now() }, syncToDb);
+    await setSettings({ ...newSettings, timestamp: Date.now() }, syncToDb);
   };
 
   // Modifies the settings based on a callback function.

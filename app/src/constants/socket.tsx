@@ -4,12 +4,12 @@ export const MAX_RECONNECTION_DELAY = 15000;
 export const events = {
   BYE: 'bye',
   HELLO: 'hello',
+  UPDATE: 'update',
   CONNECT: 'connect',
   CONNECTION: 'connection',
   DISCONNECT: 'disconnect',
 
   ERROR: 'error',
-  UPDATE: 'update',
 
   TYPING: 'typing',
   STOP_TYPING: 'stop typing',

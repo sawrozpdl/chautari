@@ -148,3 +148,10 @@ export const getInverseColor = (
   const yiq = (r * 299 + g * 587 + b * 114) / 1000;
   return yiq >= 128 ? black : white;
 };
+
+export const cleanString = (string: string): string =>
+  string.replace(/[|&;$%@"<>()+,]/g, '');
+
+export const listToString = (list: Array<string>): string => {
+  return list.join(', ').replace(/, ((?:.(?!, ))+)$/, ' and $1');
+};

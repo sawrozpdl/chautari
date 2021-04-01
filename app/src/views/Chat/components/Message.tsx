@@ -42,6 +42,7 @@ const Message = (props: any): any => {
     data,
     user,
     isFromSelf = true,
+    color,
     time,
     isMd,
     isInfo,
@@ -60,7 +61,11 @@ const Message = (props: any): any => {
             <Grid item xs={12} style={{ marginBottom: '-8px' }}>
               <ListItemText
                 secondary={
-                  <Typography variant="caption" color={'primary'}>
+                  <Typography
+                    variant="caption"
+                    color={'primary'}
+                    style={color && { color }}
+                  >
                     {user}
                   </Typography>
                 }

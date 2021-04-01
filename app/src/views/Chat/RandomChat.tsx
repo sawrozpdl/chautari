@@ -8,68 +8,42 @@ import {
   Typography,
   makeStyles,
 } from '@material-ui/core';
-
 import PropTypes from 'prop-types';
+
 import { ChatArea } from './components';
 import routes from '../../constants/routes';
 import Matching from './components/Matching';
 import ChatHalt from './components/ChatHalt';
 import { events } from '../../constants/socket';
 import { getHashAvatar } from '../../utils/user';
+import { listToString } from '../../utils/string';
+import { getCommonInterests } from '../../utils/chat';
 import SmartAvatar from '../../components/SmartAvatar';
+
+const useStyles = makeStyles((theme: any) => ({
+  partnerCont: {
+    position: 'relative',
+  },
+  interestsCont: {
+    position: 'absolute',
+    left: 0,
+    width: '100%',
+    textAlign: 'center',
+    marginTop: theme.spacing(1.5),
+  },
+}));
 
 const RandomChat: React.FC<any> = (props: any) => {
   const { className, history, socket, settings, ...rest } = props;
-  const useStyles = makeStyles((theme: any) => ({
-    paper: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    form: {
-      width: '70%',
-      marginTop: theme.spacing(1),
-      [theme.breakpoints.down('sm')]: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-      },
-    },
-    signUpButton: {
-      margin: theme.spacing(2, 0),
-    },
-    textField: {
-      marginTop: theme.spacing(2),
-    },
-    typoSend: {
-      marginTop: theme.spacing(1),
-    },
-    image: {
-      perspectiveOrigin: 'left center',
-      transformStyle: 'preserve-3d',
-      perspective: 1500,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-        transform: 'rotateY(-35deg) rotateX(15deg)',
-        backfaceVisibility: 'hidden',
-        boxShadow: theme.shadows[16],
-      },
-    },
-    shape: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-      },
-    },
-  }));
 
   const classes: any = useStyles();
 
-  const buildMessage = (text: string, isInfo = false, isMd = true) => ({
+  const isInterestBased =
+    settings.interestMatching && Boolean(settings.interests.length);
+
+  const buildMessage = (text: string, isInfo = false, isMd = true): any => ({
     user: !isInfo && settings.nickname,
+    color: settings.color,
     data: text,
     isInfo,
     time: Date.now(),
@@ -81,6 +55,7 @@ const RandomChat: React.FC<any> = (props: any) => {
   const [stopped, setStopped] = useState(false);
   const [partner, setPartner] = useState<any>(null);
   const [roomInfo, setRoomInfo] = useState(null);
+  const [commonInterests, setCommonInterests] = useState<Array<string>>([]);
   const [messages, setMessages] = useState<Array<any>>([]);
 
   const leaveChat = (): void => {
@@ -131,21 +106,32 @@ const RandomChat: React.FC<any> = (props: any) => {
     });
 
     socket.on(events.ROOM_INFO, (info: any) => {
+      if (info.users?.length < 2) return;
+
       setRoomInfo(info);
+      const partner =
+        info.users.find(
+          (user: any): boolean => user.nickname !== settings.nickname
+        ) || info.users[0];
+
+      setPartner(partner);
+      setMessages((messages) => [
+        ...messages,
+        buildMessage(`You matched with ${partner.nickname}!`, true),
+      ]);
+
+      if (isInterestBased) {
+        setCommonInterests(
+          getCommonInterests(partner.interests, settings.interests)
+        );
+      }
     });
 
     socket.on(events.MATCHED, (data: any) => {
-      const { users, ...rest } = data;
-      const partner =
-        users.find((name: string) => name !== settings.nickname) || users[0];
       setMatching(false);
-      setPartner(partner);
+      setPartner({});
       setStopped(false);
-      setMessages((messages) => [
-        ...messages,
-        buildMessage(`You matched with ${partner}!`, true),
-      ]);
-      socket.emit(events.JOIN_ROOM, rest);
+      socket.emit(events.JOIN_ROOM, data);
     });
 
     socket.on(events.UNMATCHED, () => {
@@ -191,6 +177,7 @@ const RandomChat: React.FC<any> = (props: any) => {
                 display: 'flex',
                 justifyContent: 'space-between',
                 marginBottom: '12px',
+                position: 'relative',
               }}
             >
               <Button
@@ -201,21 +188,37 @@ const RandomChat: React.FC<any> = (props: any) => {
               >
                 Exit
               </Button>
-              <Box display="flex" alignItems="center">
-                <SmartAvatar
-                  alt="User"
-                  className={classes.avatar}
-                  size={32}
-                  src={getHashAvatar({ name: partner })}
-                />
-                <Typography
-                  variant="h5"
-                  color="inherit"
-                  style={{ marginLeft: '10px' }}
-                >
-                  {partner}
-                </Typography>
-              </Box>
+              {partner && partner.nickname && (
+                <div>
+                  {' '}
+                  <Box display="flex" alignItems="center">
+                    <SmartAvatar
+                      alt="User"
+                      className={classes.avatar}
+                      size={32}
+                      src={getHashAvatar({ name: partner.nickname })}
+                    />
+                    <Typography
+                      variant="h5"
+                      color="inherit"
+                      style={{ marginLeft: '10px', color: partner.color }}
+                    >
+                      {partner.nickname}
+                    </Typography>
+                  </Box>
+                  {commonInterests && commonInterests.length ? (
+                    <Typography
+                      className={classes.interestsCont}
+                      variant="subtitle2"
+                      color="textSecondary"
+                    >
+                      {'Common Interests: ' + listToString(commonInterests)}
+                    </Typography>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              )}
               <Button
                 variant="outlined"
                 onClick={stopped ? handleRematch : handleStopClick}

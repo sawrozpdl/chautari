@@ -9,6 +9,8 @@ import { useSettings } from '../../hooks';
 import { TabView } from '../../components';
 import UserContext from '../../context/UserContext';
 import { Appearance, Interests, User, Preferences, Privacy } from './pages';
+import { events } from '../../constants/socket';
+import { getPublicSettings } from '../../utils/user';
 
 const items = {
   Appearance: { component: Appearance },
@@ -18,8 +20,8 @@ const items = {
   Privacy: { component: Privacy },
 };
 
-const App: React.FC<any> = (props: any) => {
-  const { className, history } = props;
+const Settings: React.FC<any> = (props: any) => {
+  const { className, socket, history } = props;
 
   const userCtx: any = useContext(UserContext);
 
@@ -42,6 +44,8 @@ const App: React.FC<any> = (props: any) => {
 
   const handleUpdateClick = (): void => {
     updateSettings(formState, isRegistered);
+
+    socket.emit(events.UPDATE, getPublicSettings(formState, user));
     setChanged(false);
 
     toast.success('Settings updated successfully!');
@@ -75,10 +79,10 @@ const App: React.FC<any> = (props: any) => {
   );
 };
 
-App.propTypes = {
+Settings.propTypes = {
   className: PropTypes.string,
   user: PropTypes.any,
   match: PropTypes.any,
 };
 
-export default App;
+export default Settings;

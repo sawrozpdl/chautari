@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: any) => ({
 }));
 
 const Topbar = (props: any): any => {
-  const { className, onSidebarOpen, ...rest } = props;
+  const { className, ...rest } = props;
   const userCtx: any = useContext(UserContext);
   const { user, logout } = userCtx;
 

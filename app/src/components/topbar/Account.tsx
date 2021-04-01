@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
-import { Link as RouterLink } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+
 import {
   Box,
   ButtonBase,
@@ -11,20 +11,20 @@ import {
   makeStyles,
 } from '@material-ui/core';
 
-import toast from '../../utils/toast';
-import routes from '../../constants/routes';
-import { redirectTo } from '../../utils/url';
-import * as authService from '../../services/auth';
-import { extractInitials } from '../../utils/string';
 import {
   AUTH_APP_ACCOUNT_URL,
   AUTH_APP_LOGIN_URL,
   AUTH_APP_REGISTER_URL,
 } from '../../constants/endpoints';
-import useSettings from '../../hooks/useSettings';
+import toast from '../../utils/toast';
 import SmartAvatar from '../SmartAvatar';
-import { getHashAvatar } from '../../utils/user';
+import routes from '../../constants/routes';
 import { GUEST } from '../../constants/app';
+import { redirectTo } from '../../utils/url';
+import { getHashAvatar } from '../../utils/user';
+import useSettings from '../../hooks/useSettings';
+import * as authService from '../../services/auth';
+import { extractInitials } from '../../utils/string';
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -75,9 +75,6 @@ const Account = (props: any): any => {
       <MenuItem onClick={redirectTo(AUTH_APP_ACCOUNT_URL, true)}>
         Account
       </MenuItem>
-      <MenuItem component={RouterLink} to={routes.SETTINGS}>
-        Settings
-      </MenuItem>
       <MenuItem onClick={handleLogout}>Logout</MenuItem>
     </div>
   );
@@ -87,9 +84,6 @@ const Account = (props: any): any => {
       {' '}
       <MenuItem onClick={redirectTo(AUTH_APP_LOGIN_URL)}>Login</MenuItem>
       <MenuItem onClick={redirectTo(AUTH_APP_REGISTER_URL)}>Register</MenuItem>
-      <MenuItem component={RouterLink} to={routes.SETTINGS}>
-        Settings
-      </MenuItem>
     </>
   );
 

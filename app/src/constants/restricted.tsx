@@ -1,6 +1,14 @@
-import { ANON, GUEST } from './app';
+import { ANON, GUEST, LOADING } from './app';
 
-export const takenNames = [GUEST, ANON, 'create', 'update', 'add', 'admin'];
+export const takenNames = [
+  GUEST,
+  ANON,
+  LOADING,
+  'create',
+  'update',
+  'add',
+  'admin',
+];
 export const restrictedNames = [
   '4r5e',
   '5h1t',
