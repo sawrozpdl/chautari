@@ -24,13 +24,10 @@ export const joinRandomChat = (data, socket) => {
       key: generatedKey,
     });
 
-    IO.to(match)
-      .to(userId)
-      .emit(events.MATCHED, {
-        room: generatedRoomName,
-        key: generatedKey,
-        users: [getUser(userId, 'nickname'), getUser(match, 'nickname')],
-      });
+    IO.to(match).to(userId).emit(events.MATCHED, {
+      room: generatedRoomName,
+      key: generatedKey,
+    });
   } else {
     updateUser(userId, { status: userStatus.IN_QUEUE });
   }

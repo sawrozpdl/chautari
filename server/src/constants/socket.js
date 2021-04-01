@@ -1,12 +1,12 @@
 export const events = {
   BYE: 'bye',
   HELLO: 'hello',
+  UPDATE: 'update',
   CONNECT: 'connect',
   CONNECTION: 'connection',
   DISCONNECT: 'disconnect',
 
   ERROR: 'error',
-  UPDATE: 'update',
 
   TYPING: 'typing',
   STOP_TYPING: 'stop typing',
@@ -37,4 +37,16 @@ export const messageTypes = {
   ERROR: 'ERROR',
   SUCCESS: 'SUCCESS',
   INFO: 'INFO',
+  UNAUTHORIZED: 'UNAUTHORIZED',
 };
+
+export const publicSettingsAttrs = ['nickname', 'color', 'user', 'interests'];
+export const publicUserAttrs = [
+  'firstName',
+  'lastName',
+  'middleName',
+  'id',
+  'location',
+  'ageGroup',
+  'activeRoles',
+];

@@ -6,7 +6,7 @@ import { events } from '../../constants/socket';
 
 import { sendMessage } from './message';
 import { getStats } from '../models/user';
-import { connect, disconnect } from './stat';
+import { connect, update, disconnect } from './stat';
 import { joinRoom, leaveRoom } from './roomChat';
 import { joinRandomChat, leaveRandomChat } from './randomChat';
 
@@ -24,6 +24,8 @@ export const handleSocketConnection = (socket) => {
   socket.on(events.SEND_MESSAGE, handle(sendMessage, socket));
 
   socket.on(events.HELLO, handle(connect, socket));
+
+  socket.on(events.UPDATE, handle(update, socket));
 
   socket.on(events.BYE, handle(disconnect, socket, { consented: true }));
 

@@ -9,7 +9,7 @@ const _findBestMatch = (id, queue) => {
   const bestMatch = { user: null, score: 0 };
   Object.keys(queue).forEach((userId) => {
     const newScore = getMatchPercentage(id, userId);
-    if (newScore > bestMatch.score) {
+    if (newScore && newScore > bestMatch.score) {
       bestMatch.user = userId;
       bestMatch.score = newScore;
     }
@@ -40,7 +40,7 @@ export const matchOrJoinQueue = (id) => {
 
   const queue = getQueueForUser(userSettings);
 
-  if (userSettings.interestMatching) {
+  if (userSettings.interestMatching && userSettings.interests?.length !== 0) {
     return _findBestMatch(id, queue);
   } else {
     return _findRandomMatch(id, queue);

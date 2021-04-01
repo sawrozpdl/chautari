@@ -1,29 +1,32 @@
-import { getUser, users } from './user';
+import { getPublicUserInfo, getUser, users } from './user';
 
 const rooms = {};
 
-export const getRoom = (name) => {
-  return rooms[name];
+export const getRoom = (roomName) => {
+  return rooms[roomName];
 };
 
-export const createRoom = (name, settings) => {
-  rooms[name] = settings;
+export const createRoom = (roomName, settings) => {
+  rooms[roomName] = settings;
 };
 
 export const deleteRoom = (name) => {
   delete rooms[name];
 };
 
-export const removeUserFromRoom = (room, userId) => {
-  rooms[room].users.filter((curUserId) => curUserId !== userId);
+export const removeUserFromRoom = (roomName, userId) => {
+  rooms[roomName].users.filter((curUserId) => curUserId !== userId);
+};
+
+export const getUsers = (roomName) => {
+  return rooms[roomName].users.map(getPublicUserInfo);
 };
 
 export const getStats = (roomName) => {
   return roomName
     ? {
-        users: rooms[roomName].users.map((userId) =>
-          getUser(userId, 'nickname')
-        ),
+        ...rooms[roomName],
+        users: getUsers(roomName),
       }
     : {
         totalRooms: Object.keys(rooms).length,

@@ -1,7 +1,12 @@
+import {
+  userStatus,
+  publicSettingsAttrs,
+  publicUserAttrs,
+} from '../../constants/socket';
 import logger from '../../utils/logger';
 import { removeUserFromRoom } from './room';
+import { withAttrs } from '../../utils/object';
 import { cleanString } from '../../utils/string';
-import { userStatus } from '../../constants/socket';
 import { getQueueForUser, leaveQueue } from './queue';
 
 const users = {};
@@ -27,6 +32,20 @@ const _updateStats = (prev, curr) => {
 
 export const getUser = (id, key) => {
   return key ? users[id][key] : users[id];
+};
+
+export const setUser = (id, settings) => {
+  users[id] = settings;
+};
+
+export const getPublicUserInfo = (id) => {
+  const userSettings = users[id];
+
+  if (!userSettings.privateMode) {
+    userSettings.user = withAttrs(userSettings.user, publicUserAttrs);
+  }
+
+  return withAttrs(userSettings, publicSettingsAttrs);
 };
 
 export const registerUser = (id, settings) => {
@@ -61,7 +80,7 @@ export const logoutUser = (userId, callback) => {
 };
 
 export const getMatchPercentage = (user1, user2) => {
-  const matches = 1;
+  let matches = 0;
   const user1Interests = users[user1].interests;
   const user2Interests = users[user2].interests;
 
@@ -73,7 +92,9 @@ export const getMatchPercentage = (user1, user2) => {
     });
   });
 
-  return (matches * 2) / (2 + user1Interests.length + user2Interests.length);
+  return matches === 0
+    ? 0
+    : matches / (user1Interests.length + user2Interests.length);
 };
 
 export const getStats = () => {

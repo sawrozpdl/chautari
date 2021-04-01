@@ -1,3 +1,4 @@
+import IO from '../../socket';
 import logger from '../../utils/logger';
 import { notify } from '../services/notify';
 import { updateUser, getUser } from '../models/user';
@@ -29,7 +30,7 @@ export const joinRoom = (data, socket) => {
 
   if (room.key && room.key !== enteringKey) {
     return notify(userId, {
-      type: messageTypes.ERROR,
+      type: messageTypes.UNAUTHORIZED,
       text: "That key ain't right, I am calling 911",
       requestId: data?.requestId,
     });
@@ -37,7 +38,7 @@ export const joinRoom = (data, socket) => {
 
   if (room.users.includes(userId)) {
     return notify(userId, {
-      type: messageTypes.ERROR,
+      type: messageTypes.INFO,
       text: 'You are already in this room!',
       requestId: data?.requestId,
     });
@@ -45,7 +46,7 @@ export const joinRoom = (data, socket) => {
 
   if (room.users.length >= room.maxUsers) {
     return notify(userId, {
-      type: messageTypes.ERROR,
+      type: messageTypes.INFO,
       text: 'Too late bro, this room is full!',
       requestId: data?.requestId,
     });
@@ -55,7 +56,7 @@ export const joinRoom = (data, socket) => {
   updateUser(userId, { activeRoom: roomName, status: userStatus.IN_ROOM });
   socket.join(roomName);
 
-  socket.to(roomName).emit(events.ROOM_INFO, getStats(roomName));
+  IO.in(roomName).emit(events.ROOM_INFO, getStats(roomName));
 };
 
 export const leaveRoom = (data, socket) => {
@@ -69,6 +70,7 @@ export const leaveRoom = (data, socket) => {
       data: `${getUser(userId, 'nickname')} has left the room.`,
       user: 'Admin',
       isInfo: true,
+      time: Date.now(),
     });
 
     socket.to(roomName).emit(events.ROOM_INFO, getStats(roomName));

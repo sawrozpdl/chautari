@@ -3,11 +3,16 @@ import { getRoom } from '../models/room';
 import { leaveRoomForUser } from '../services/roomChat';
 import { events, userStatus } from '../../constants/socket';
 import { leaveRandomChatForUser } from '../services/randomChat';
-import { getUser, logoutUser, registerUser } from '../models/user';
+import { getUser, logoutUser, registerUser, setUser } from '../models/user';
 
 export const connect = (data, socket) => {
   const { id: userId } = socket;
   registerUser(userId, data);
+};
+
+export const update = (data, socket) => {
+  const { id: userId } = socket;
+  setUser(userId, data);
 };
 
 const _leaveInvolvedRoom = (userId, consented) => {
