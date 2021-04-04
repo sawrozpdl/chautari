@@ -1,4 +1,4 @@
-import { USERNAME } from '../constants/schemas';
+import { PASS_KEY, ROOM_NAME, USERNAME } from '../constants/schemas';
 
 /**
  *
@@ -131,7 +131,9 @@ export const isValidHttpUrl = (string: string) => {
 };
 
 const regexMap: any = {
-  [USERNAME]: '^(?=.{3,20}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._ ]+(?<![_.])$',
+  [USERNAME]: '^(?=.{3,50}$)(?![_.])(?!.*[_.]{2})[a-zA-Z0-9._ ]+(?<![_.])$',
+  [ROOM_NAME]: '^(?=.{3,50}$)[a-zA-Z-]+$',
+  [PASS_KEY]: '.{4,20}$',
 };
 
 export const matches = (string: string, schema: string): boolean =>

@@ -6,7 +6,7 @@ import { ListItem, Grid, ListItemText, Typography } from '@material-ui/core';
 import Markdown from '../../../components/Markdown';
 
 const Info = (props: any): any => {
-  const { user, time, data } = props;
+  const { time, data } = props;
 
   return (
     <div
@@ -17,12 +17,6 @@ const Info = (props: any): any => {
         marginBottom: '16px',
       }}
     >
-      {user && (
-        <Typography variant="caption">
-          {' '}
-          {user} {' :'}
-        </Typography>
-      )}
       <Typography
         variant="h4"
         color="textPrimary"
@@ -54,7 +48,7 @@ const Message = (props: any): any => {
       {Component ? (
         <Component {...rest} />
       ) : isInfo ? (
-        <Info data={data} user={user} time={time} />
+        <Info data={data} time={time} />
       ) : (
         <Grid container style={{ textAlign: isFromSelf ? 'right' : 'left' }}>
           {!isFromSelf && (

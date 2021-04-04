@@ -25,6 +25,12 @@ import { form as messages } from '../../constants/labels';
 import { getRandomName, getHashAvatar } from '../../utils/user';
 import { restrictedNames, takenNames } from '../../constants/restricted';
 
+const defaultValues = {
+  nickname: getRandomName(),
+  conversationSharing: true,
+  safeMode: false,
+};
+
 const Setup: React.FC<any> = (props: any) => {
   const { history } = props;
   const useStyles = makeStyles((theme: any) => ({
@@ -44,14 +50,6 @@ const Setup: React.FC<any> = (props: any) => {
     checkbox: {
       marginTop: theme.spacing(1.5),
     },
-    form: {
-      width: '70%',
-      marginTop: theme.spacing(1),
-      [theme.breakpoints.down('sm')]: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-      },
-    },
     avatar: {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(1),
@@ -61,30 +59,6 @@ const Setup: React.FC<any> = (props: any) => {
     },
     textField: {
       marginTop: theme.spacing(2),
-    },
-    typoSend: {
-      marginTop: theme.spacing(1),
-    },
-    image: {
-      perspectiveOrigin: 'left center',
-      transformStyle: 'preserve-3d',
-      perspective: 1500,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-        transform: 'rotateY(-35deg) rotateX(15deg)',
-        backfaceVisibility: 'hidden',
-        boxShadow: theme.shadows[16],
-      },
-    },
-    shape: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-      },
     },
   }));
 
@@ -99,14 +73,6 @@ const Setup: React.FC<any> = (props: any) => {
       history.push(routes.APP);
     }
   }, [settings]);
-
-  const randomName = getRandomName();
-
-  const defaultValues = {
-    nickname: randomName,
-    conversationSharing: true,
-    safeMode: false,
-  };
 
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [errors, setErrors] = useState<any>({});

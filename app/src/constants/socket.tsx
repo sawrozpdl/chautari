@@ -18,6 +18,14 @@ export const events = {
   SEND_MESSAGE: 'send message',
   PRIVATE_MESSAGE: 'private message',
 
+  CREATE_ROOM: 'create room',
+  ROOM_CREATED: 'room created',
+  ROOM_CREATION_FAILED: 'room creation failed',
+
+  REQUEST_JOIN: 'request join',
+  JOIN_REQUEST_ACCEPTED: 'join request accepted',
+  JOIN_REQUEST_REJECTED: 'join request rejected',
+
   JOIN_ROOM: 'join room',
   ROOM_INFO: 'room info',
   LEAVE_ROOM: 'leave room',

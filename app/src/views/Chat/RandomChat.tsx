@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 
 import {
   Container,
@@ -15,6 +15,7 @@ import routes from '../../constants/routes';
 import Matching from './components/Matching';
 import ChatHalt from './components/ChatHalt';
 import { events } from '../../constants/socket';
+import Messenger from '../../services/message';
 import { getHashAvatar } from '../../utils/user';
 import { listToString } from '../../utils/string';
 import { getCommonInterests } from '../../utils/chat';
@@ -41,15 +42,10 @@ const RandomChat: React.FC<any> = (props: any) => {
   const isInterestBased =
     settings.interestMatching && Boolean(settings.interests.length);
 
-  const buildMessage = (text: string, isInfo = false, isMd = true): any => ({
-    user: !isInfo && settings.nickname,
-    color: settings.color,
-    data: text,
-    isInfo,
-    time: Date.now(),
-    isFromSelf: true,
-    isMd: true,
-  });
+  const messenger = useMemo((): any => new Messenger(socket, settings), [
+    socket,
+    settings,
+  ]);
 
   const [matching, setMatching] = useState(true);
   const [stopped, setStopped] = useState(false);
@@ -117,7 +113,9 @@ const RandomChat: React.FC<any> = (props: any) => {
       setPartner(partner);
       setMessages((messages) => [
         ...messages,
-        buildMessage(`You matched with ${partner.nickname}!`, true),
+        messenger
+          .text(`You matched with ${partner.nickname}!`)
+          .build({ isInfo: true }),
       ]);
 
       if (isInterestBased) {
@@ -154,10 +152,11 @@ const RandomChat: React.FC<any> = (props: any) => {
   }, []);
 
   const handleMessageSend = (message: string, callback: any): void => {
-    const messageCont = buildMessage(message);
-    setMessages((messages) => [...messages, messageCont]);
+    messenger.text(message).md(true);
 
-    socket.emit(events.SEND_MESSAGE, { ...messageCont, isFromSelf: false });
+    setMessages((messages) => [...messages, messenger.self(true).build()]);
+
+    messenger.self(false).send();
 
     if (callback) {
       callback();
@@ -232,9 +231,6 @@ const RandomChat: React.FC<any> = (props: any) => {
               <ChatArea
                 messages={messages}
                 active={Boolean(partner) && !stopped}
-                fallback={ChatHalt}
-                onRematch={handleRematch}
-                onBackClick={handleBackClick}
                 onSend={handleMessageSend}
               />
             </Grid>

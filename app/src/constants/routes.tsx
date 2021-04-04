@@ -6,16 +6,16 @@ const routes = {
   CHAT: '/app/chat',
   RANDOM_CHAT: '/app/chat/random',
   ROOM_CHAT: '/app/chat/room/:name',
-  ROOM_EDIT: '/app/room/:option',
+  ROOM_OPTION: '/app/room/:option',
   ROOM_LIST: '/app/rooms',
   SETTINGS: '/app/settings',
   AUTH_CALLBACK: '/auth/callback',
   NOT_FOUND: '/404',
 };
 
-const options = {
+const roomOptions = {
   CREATE: 'create',
   JOIN: 'join',
 };
 
-export { routes as default, options };
+export { routes as default, roomOptions };

@@ -8,7 +8,7 @@ import Messages from './Messages';
 import { getRandomChatGuide } from '../../../utils/chat';
 
 const ChatArea = (props: any): any => {
-  const { messages, onSend, active } = props;
+  const { messages, onSend, active = true } = props;
 
   const [text, setText] = useState('');
 

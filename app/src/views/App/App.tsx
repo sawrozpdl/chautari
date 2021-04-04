@@ -17,7 +17,7 @@ import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
 
 import ChipButton from '../../components/ChipButton';
-import routes, { options } from '../../constants/routes';
+import routes, { roomOptions } from '../../constants/routes';
 import { interpolate, parseQuery } from '../../utils/string';
 
 const App: React.FC<any> = (props: any) => {
@@ -127,9 +127,9 @@ const App: React.FC<any> = (props: any) => {
     props.location.search,
   ]);
 
-  const { room } = getQuery();
+  const { mode } = getQuery();
 
-  const isRoomMode = Boolean(room);
+  const isRoomMode = mode === 'room';
 
   const handleRandomChatClick = (): void => {
     if (!socket.connected) {
@@ -139,11 +139,13 @@ const App: React.FC<any> = (props: any) => {
   };
 
   const handleCreateRoomClick = (): void => {
-    history.push(interpolate(routes.ROOM_EDIT, { option: options.CREATE }));
+    history.push(
+      interpolate(routes.ROOM_OPTION, { option: roomOptions.CREATE })
+    );
   };
 
   const handleJoinRoomClick = (): void => {
-    history.push(interpolate(routes.ROOM_EDIT, { option: options.JOIN }));
+    history.push(interpolate(routes.ROOM_OPTION, { option: roomOptions.JOIN }));
   };
 
   const handleBrowseRoomClick = (): void => {
@@ -160,7 +162,7 @@ const App: React.FC<any> = (props: any) => {
   const handleRoomClick = (): void => {
     history.push({
       pathname: routes.APP,
-      search: '?room=true',
+      search: '?mode=room',
     });
   };
 
@@ -194,7 +196,6 @@ const App: React.FC<any> = (props: any) => {
                   icon={AddCircleIcon}
                   label={'Create Room'}
                   onClick={handleCreateRoomClick}
-                  disabled={true} //TODO
                   info="Create a new room and invite other people."
                 />
               </Grid>
@@ -203,7 +204,6 @@ const App: React.FC<any> = (props: any) => {
                   icon={MeetingRoomIcon}
                   label={'Join Room'}
                   onClick={handleJoinRoomClick}
-                  disabled={true} //TODO
                   info="Join a created room"
                 />
               </Grid>

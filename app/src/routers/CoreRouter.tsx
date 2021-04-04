@@ -99,7 +99,7 @@ const CoreRouter: React.FC<any> = (props: any): any => {
         />
         <AppRoute
           exact
-          path={routes.ROOM_EDIT}
+          path={routes.ROOM_OPTION}
           component={EditRoom}
           socket={socket}
           settings={userSettings}

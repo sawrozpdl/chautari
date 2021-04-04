@@ -5,6 +5,7 @@ const form = {
   inappropriateName: "Oops, Looks like you can't use this name",
   shortName: 'Invalid characters or too short name',
   longName: 'Too long name, wanna use abbreviations?',
+  badKey: 'Pass key is either too short or long',
 };
 
 const generic = {
@@ -18,8 +19,8 @@ const chat = {
 };
 
 const interests = {
-  tooShort: 'Bro, come on, put some valid 3-50 character interest.',
-  tooLong: "Hell nah, that's too long, make it less than 50!",
+  tooShort: 'Too short!, Have to be 3-50 characters.',
+  tooLong: 'Too long!, Have to be 3-50 characters.',
 };
 
 const greetings = ["We're happy to see you here!", "Heyaaa, What's poppin?"];
