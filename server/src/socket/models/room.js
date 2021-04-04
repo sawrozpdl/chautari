@@ -6,8 +6,14 @@ export const getRoom = (roomName) => {
   return rooms[roomName];
 };
 
-export const createRoom = (roomName, settings) => {
+export const roomExists = (roomName) => {
+  return roomName in rooms;
+};
+
+export const buildRoom = (roomName, settings) => {
   rooms[roomName] = settings;
+
+  return settings;
 };
 
 export const deleteRoom = (name) => {

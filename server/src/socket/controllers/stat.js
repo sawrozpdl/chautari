@@ -1,5 +1,5 @@
 import logger from '../../utils/logger';
-import { getRoom } from '../models/room';
+import { getRoom, getStats } from '../models/room';
 import { leaveRoomForUser } from '../services/roomChat';
 import { events, userStatus } from '../../constants/socket';
 import { leaveRandomChatForUser } from '../services/randomChat';
@@ -15,7 +15,7 @@ export const update = (data, socket) => {
   setUser(userId, data);
 };
 
-const _leaveInvolvedRoom = (userId, consented) => {
+const _leaveInvolvedRoom = (socket, userId, consented) => {
   const { nickname, activeRoom } = getUser(userId);
   const room = getRoom(activeRoom);
 
@@ -29,6 +29,7 @@ const _leaveInvolvedRoom = (userId, consented) => {
         }`,
         user: 'Admin',
         isInfo: true,
+        time: Date.now(),
       });
 
       socket.to(activeRoom).emit(events.ROOM_INFO, getStats(activeRoom));
@@ -43,7 +44,7 @@ export const disconnect = (_, socket, { consented }) => {
 
   logoutUser(userId, (status) => {
     if (status === userStatus.IN_ROOM) {
-      _leaveInvolvedRoom(userId, consented);
+      _leaveInvolvedRoom(socket, userId, consented);
     }
   });
 };

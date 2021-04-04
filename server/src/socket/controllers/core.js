@@ -7,8 +7,8 @@ import { events } from '../../constants/socket';
 import { sendMessage } from './message';
 import { getStats } from '../models/user';
 import { connect, update, disconnect } from './stat';
-import { joinRoom, leaveRoom } from './roomChat';
 import { joinRandomChat, leaveRandomChat } from './randomChat';
+import { createRoom, requestJoin, joinRoom, leaveRoom } from './roomChat';
 
 export const handleSocketConnection = (socket) => {
   logger.info('New user joined!', socket.id);
@@ -16,6 +16,10 @@ export const handleSocketConnection = (socket) => {
   socket.on(events.JOIN_RANDOM_CHAT, handle(joinRandomChat, socket));
 
   socket.on(events.LEAVE_RANDOM_CHAT, handle(leaveRandomChat, socket));
+
+  socket.on(events.CREATE_ROOM, handle(createRoom, socket));
+
+  socket.on(events.REQUEST_JOIN, handle(requestJoin, socket));
 
   socket.on(events.JOIN_ROOM, handle(joinRoom, socket));
 

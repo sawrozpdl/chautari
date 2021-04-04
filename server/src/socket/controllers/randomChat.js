@@ -8,7 +8,7 @@ import {
   leaveRandomChatForUser,
   leaveQueueForUser,
 } from '../services/randomChat';
-import { createRoom, deleteRoom, getRoom } from '../models/room';
+import { buildRoom, deleteRoom, getRoom } from '../models/room';
 
 export const joinRandomChat = (data, socket) => {
   const { id: userId } = socket;
@@ -17,7 +17,7 @@ export const joinRandomChat = (data, socket) => {
     const generatedRoomName = `${userId}_${match}`;
     const generatedKey = getRandomKey();
 
-    createRoom(generatedRoomName, {
+    buildRoom(generatedRoomName, {
       users: [],
       maxUsers: 2,
       isRandom: true,
@@ -25,7 +25,7 @@ export const joinRandomChat = (data, socket) => {
     });
 
     IO.to(match).to(userId).emit(events.MATCHED, {
-      room: generatedRoomName,
+      roomName: generatedRoomName,
       key: generatedKey,
     });
   } else {

@@ -1,4 +1,5 @@
 import { updateUser } from '../models/user';
+import { userStatus } from '../../constants/socket';
 import { deleteRoom, getRoom } from '../models/room';
 
 export const leaveRoomForUser = (roomName, userId, callback) => {
@@ -10,7 +11,9 @@ export const leaveRoomForUser = (roomName, userId, callback) => {
 
   room.users = room.users.filter((roomUserId) => roomUserId !== userId);
 
-  if (!room.users.length) {
+  let shouldDeleteRoom = !room.users.length;
+
+  if (shouldDeleteRoom) {
     deleteRoom(roomName);
   }
 
@@ -19,5 +22,5 @@ export const leaveRoomForUser = (roomName, userId, callback) => {
     status: userStatus.IDLE,
   });
 
-  if (callback) callback();
+  if (callback) callback(shouldDeleteRoom);
 };
