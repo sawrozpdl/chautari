@@ -15,9 +15,9 @@ import {
 } from '@material-ui/core';
 
 import toast from '../../utils/toast';
-import { ItemsSelect } from '../../components';
 import { events } from '../../constants/socket';
 import { form, interests } from '../../constants/labels';
+import { ItemsSelect, SlideSelect } from '../../components';
 import routes, { roomOptions } from '../../constants/routes';
 import { ROOM_NAME, PASS_KEY } from '../../constants/schemas';
 import { interpolate, matches, parseQuery } from '../../utils/string';
@@ -84,6 +84,10 @@ const EditRoom: React.FC<any> = (props: any) => {
       display: 'flex',
       width: '75%',
       justifyContent: 'space-around',
+    },
+    slider: {
+      width: '75%',
+      marginTop: theme.spacing(2),
     },
   }));
 
@@ -275,6 +279,19 @@ const EditRoom: React.FC<any> = (props: any) => {
               }
               label="Private room"
               labelPlacement="start"
+            />
+          )}
+          {isCreating && (
+            <SlideSelect
+              className={classes.slider}
+              name={'maxUsers'}
+              title={'Max users:'}
+              usePaper={false}
+              onChange={handleChange}
+              min={2}
+              max={12}
+              step={1}
+              value={values.maxUsers}
             />
           )}
           <div className={isCreating ? classes.options : classes.optionsAlt}>

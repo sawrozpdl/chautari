@@ -16,6 +16,8 @@ const SlideSelect = (props: any): any => {
     name,
     onChange,
     title,
+    className,
+    usePaper = true,
     description,
     value,
     min = 0,
@@ -39,12 +41,8 @@ const SlideSelect = (props: any): any => {
     }
   };
 
-  return (
-    <Paper
-      {...paperProps}
-      component={Box}
-      elevation={Math.round((10 * value) / (max - min))}
-    >
+  const renderSelect = (): any => (
+    <>
       <Box mb={2}>
         {title && (
           <Typography gutterBottom variant="h5" color="textPrimary">
@@ -83,7 +81,20 @@ const SlideSelect = (props: any): any => {
           />
         </Grid>
       </Grid>
+    </>
+  );
+
+  return usePaper ? (
+    <Paper
+      className={className}
+      {...paperProps}
+      component={Box}
+      elevation={Math.round((10 * value) / (max - min))}
+    >
+      {renderSelect()}
     </Paper>
+  ) : (
+    <div className={className}>{renderSelect()}</div>
   );
 };
 

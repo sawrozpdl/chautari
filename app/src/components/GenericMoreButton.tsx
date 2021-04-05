@@ -10,9 +10,6 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import MoreIcon from '@material-ui/icons/MoreVert';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
-import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 
 const useStyles = makeStyles(() => ({
   menu: {
@@ -21,23 +18,24 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const GenericMoreButton = (props: any) => {
+const GenericMoreButton = (props: any): any => {
+  const { options, onOptionClick, value, ...rest } = props;
   const classes = useStyles();
   const moreRef = useRef(null);
   const [openMenu, setOpenMenu] = useState(false);
 
-  const handleMenuOpen = () => {
+  const handleMenuOpen = (): void => {
     setOpenMenu(true);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = (): void => {
     setOpenMenu(false);
   };
 
   return (
     <>
       <Tooltip title="More options">
-        <IconButton {...props} onClick={handleMenuOpen} ref={moreRef}>
+        <IconButton {...rest} onClick={handleMenuOpen} ref={moreRef}>
           <MoreIcon fontSize="small" />
         </IconButton>
       </Tooltip>
@@ -55,24 +53,22 @@ const GenericMoreButton = (props: any) => {
           horizontal: 'left',
         }}
       >
-        <MenuItem>
-          <ListItemIcon>
-            <RefreshIcon />
-          </ListItemIcon>
-          <ListItemText primary="Refresh" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <FileCopyIcon />
-          </ListItemIcon>
-          <ListItemText primary="Copy" />
-        </MenuItem>
-        <MenuItem>
-          <ListItemIcon>
-            <PictureAsPdfIcon />
-          </ListItemIcon>
-          <ListItemText primary="Export" />
-        </MenuItem>
+        {Object.keys(options).map((option, index) => {
+          const Icon = options[option];
+          return (
+            <MenuItem
+              key={index}
+              onClick={(): void => {
+                onOptionClick(option, value);
+              }}
+            >
+              <ListItemIcon>
+                <Icon />
+              </ListItemIcon>
+              <ListItemText primary={option} />
+            </MenuItem>
+          );
+        })}
       </Menu>
     </>
   );
@@ -80,6 +76,9 @@ const GenericMoreButton = (props: any) => {
 
 GenericMoreButton.propTypes = {
   className: PropTypes.string,
+  options: PropTypes.object,
+  onOptionClick: PropTypes.func,
+  value: PropTypes.string,
 };
 
 export default memo(GenericMoreButton);

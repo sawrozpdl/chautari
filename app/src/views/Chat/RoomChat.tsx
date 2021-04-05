@@ -1,20 +1,25 @@
 import React, { useMemo, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
 import {
   Container,
   Grid,
+  Avatar,
   makeStyles,
   Box,
   Typography,
 } from '@material-ui/core';
-import { interpolate, parseQuery } from '../../utils/string';
-import { events } from '../../constants/socket';
-import routes, { roomOptions } from '../../constants/routes';
-import Messenger from '../../services/message';
-import { ChatArea } from './components';
+
 import toast from '../../utils/toast';
+import UserList from './components/UserList';
+import Messenger from '../../services/message';
+import LockIcon from '@material-ui/icons/Lock';
+import { roomInfoObj } from '../../mocks/room';
+import { events } from '../../constants/socket';
+import { ChatArea, RoomInfo } from './components';
+import PublicIcon from '@material-ui/icons/Public';
+import { interpolate, parseQuery } from '../../utils/string';
+import routes, { roomOptions } from '../../constants/routes';
 
 const RoomChat: React.FC<any> = (props: any) => {
   const {
@@ -30,8 +35,10 @@ const RoomChat: React.FC<any> = (props: any) => {
 
   const classes: any = useStyles();
 
-  const [roomInfo, setRoomInfo] = useState<any>({});
+  const [roomInfo, setRoomInfo] = useState<any>(roomInfoObj);
   const [messages, setMessages] = useState<Array<any>>([]);
+
+  const isAdmin = true || socket.id === roomInfo.admin;
 
   const query = useMemo(() => parseQuery(location.search), [location.search]);
   const messenger = useMemo((): any => new Messenger(socket, settings), [
@@ -97,42 +104,55 @@ const RoomChat: React.FC<any> = (props: any) => {
 
   return (
     <div className={className} {...rest}>
-      <Container maxWidth="md">
-        <Grid container style={{ height: '80vh', marginTop: '24px' }}>
-          <div
-            style={{
-              width: '100%',
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginBottom: '12px',
-              position: 'relative',
-            }}
-          >
-            <Button
-              variant="outlined"
-              onClick={handleBackClick}
-              className={classes.backBtn}
-              color="secondary"
-            >
-              {'Exit'}
-            </Button>
-            {roomInfo && roomInfo.roomName && (
-              <div>
-                {' '}
-                <Box display="flex" alignItems="center">
-                  <Typography
-                    variant="h5"
-                    color="inherit"
-                    style={{ marginLeft: '10px' }}
-                  >
-                    {roomInfo.roomName}
-                  </Typography>
-                </Box>
-              </div>
+      <Container maxWidth="xl">
+        <Grid
+          container
+          style={{ height: '80vh', marginTop: '24px' }}
+          spacing={2}
+        >
+          <Grid item lg={3} xs={12}>
+            {roomInfo && (
+              <RoomInfo
+                info={roomInfo}
+                adminTools={isAdmin}
+                onLeave={handleBackClick}
+              />
             )}
-          </div>
-          <Grid item lg={12} xs={12}>
+          </Grid>
+          <Grid item lg={6} xs={12}>
+            <div
+              style={{
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'center',
+                marginBottom: '12px',
+                position: 'relative',
+              }}
+            >
+              {roomInfo && roomInfo.roomName && (
+                <div>
+                  {' '}
+                  <Box display="flex" alignItems="center">
+                    <Avatar style={{ width: 32, height: 32 }}>
+                      {roomInfo.isPrivate ? <PublicIcon /> : <LockIcon />}
+                    </Avatar>
+                    <Typography
+                      variant="h5"
+                      color="inherit"
+                      style={{ marginLeft: '10px' }}
+                    >
+                      {roomInfo.roomName}
+                    </Typography>
+                  </Box>
+                </div>
+              )}
+            </div>
             <ChatArea messages={messages} onSend={handleMessageSend} />
+          </Grid>
+          <Grid item lg={3} xs={12}>
+            {roomInfo?.users && (
+              <UserList users={roomInfo.users} adminTools={isAdmin} />
+            )}
           </Grid>
         </Grid>
       </Container>
