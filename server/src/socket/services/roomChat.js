@@ -9,7 +9,7 @@ export const leaveRoomForUser = (roomName, userId, callback) => {
 
   if (!room) return;
 
-  room.users = room.users.filter((roomUserId) => roomUserId !== userId);
+  room.users = room.users.filter((userObj) => userId !== userObj.userId);
 
   let shouldDeleteRoom = !room.users.length;
 

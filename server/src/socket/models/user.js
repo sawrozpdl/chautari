@@ -38,8 +38,11 @@ export const setUser = (id, settings) => {
   users[id] = settings;
 };
 
-export const getPublicUserInfo = (id) => {
-  const userSettings = users[id];
+export const getPublicUserInfo = ({ userId, joinedAt }) => {
+  const userSettings = users[userId];
+
+  userSettings.id = userId;
+  userSettings.joinedAt = joinedAt;
 
   if (!userSettings.privateMode) {
     userSettings.user = withAttrs(userSettings.user, publicUserAttrs);

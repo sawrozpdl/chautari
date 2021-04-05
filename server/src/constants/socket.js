@@ -48,7 +48,14 @@ export const messageTypes = {
   UNAUTHORIZED: 'UNAUTHORIZED',
 };
 
-export const publicSettingsAttrs = ['nickname', 'color', 'user', 'interests'];
+export const publicSettingsAttrs = [
+  'id',
+  'joinedAt',
+  'nickname',
+  'color',
+  'user',
+  'interests',
+];
 export const publicUserAttrs = [
   'firstName',
   'lastName',

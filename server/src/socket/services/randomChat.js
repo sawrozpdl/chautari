@@ -52,7 +52,7 @@ export const leaveRandomChatForUser = (roomName, userId) => {
 
   if (!room) return;
 
-  const otherUser = room.users.find((roomUserId) => roomUserId !== userId);
+  const otherUser = room.users.find((userObj) => roomUserId !== userObj.userId);
 
   deleteRoom(roomName);
   IO.to(otherUser).emit(events.UNMATCHED, 'OOF');

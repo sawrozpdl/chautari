@@ -16,8 +16,6 @@ import { events, messageTypes, userStatus } from '../../constants/socket';
 export const createRoom = (data, socket) => {
   const { id: userId } = socket;
 
-  console.log(data);
-
   const { roomName, maxUsers, key, topics, isPrivate = true } = data;
 
   const duplicateName = roomExists(roomName);
@@ -32,8 +30,10 @@ export const createRoom = (data, socket) => {
     users: [],
     maxUsers,
     key,
+    topics,
     admin: userId,
     isPrivate,
+    createdAt: Date.now(),
   });
 
   IO.to(userId).emit(events.ROOM_CREATED, created);
@@ -41,8 +41,6 @@ export const createRoom = (data, socket) => {
 
 export const requestJoin = (data, socket, params, callback) => {
   const { id: userId } = socket;
-
-  console.log(data);
 
   const { roomName, key: enteringKey } = data;
 
@@ -76,7 +74,7 @@ export const requestJoin = (data, socket, params, callback) => {
 export const joinRoom = (data, socket) => {
   requestJoin(data, socket, {}, (userId, roomName) => {
     const room = getRoom(roomName);
-    room.users.push(userId);
+    room.users.push({ userId, joinedAt: Date.now() });
     updateUser(userId, { activeRoom: roomName, status: userStatus.IN_ROOM });
     socket.join(roomName);
 
