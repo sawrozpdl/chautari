@@ -154,6 +154,11 @@ export const getInverseColor = (
 export const cleanString = (string: string): string =>
   string.replace(/[|&;$%@"<>()+,]/g, '');
 
-export const listToString = (list: Array<string>): string => {
-  return list.join(', ').replace(/, ((?:.(?!, ))+)$/, ' and $1');
+export const listToString = (
+  list: Array<string>,
+  accessor?: string
+): string => {
+  return (accessor ? list.map((item: any) => item[accessor]) : list)
+    .join(', ')
+    .replace(/, ((?:.(?!, ))+)$/, ' and $1');
 };

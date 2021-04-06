@@ -232,6 +232,7 @@ const RandomChat: React.FC<any> = (props: any) => {
                 messages={messages}
                 active={Boolean(partner) && !stopped}
                 onSend={handleMessageSend}
+                socket={socket}
               />
             </Grid>
           </Grid>

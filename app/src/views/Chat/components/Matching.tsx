@@ -7,11 +7,7 @@ const Matching = (props: any): any => {
   const { onStop } = props;
   return (
     <div style={{ width: '100%', textAlign: 'center', marginTop: '16px' }}>
-      <img
-        src={getRandomLoadingGif()}
-        height={400}
-        alt={'/images/skeleton_waiting.gif'}
-      />{' '}
+      <img src={getRandomLoadingGif()} height={400} alt={'waiting'} />{' '}
       <Typography variant="h2" color="textPrimary">
         {'We are searching a cool person for you!'}
       </Typography>

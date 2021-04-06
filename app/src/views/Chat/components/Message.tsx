@@ -38,6 +38,7 @@ const Message = (props: any): any => {
     isFromSelf = true,
     color,
     time,
+    showTime = true,
     isMd,
     isInfo,
     component: Component,
@@ -66,7 +67,7 @@ const Message = (props: any): any => {
               />
             </Grid>
           )}
-          <Grid item xs={12}>
+          <Grid item xs={12} style={showTime ? {} : { marginBottom: '-16px' }}>
             <ListItemText
               primary={
                 <Typography variant="h3">
@@ -76,8 +77,12 @@ const Message = (props: any): any => {
               }
             />
           </Grid>
-          {time && (
-            <Grid item xs={12} style={{ marginTop: '-8px' }}>
+          {time && showTime && (
+            <Grid
+              item
+              xs={12}
+              style={{ marginTop: '-8px', marginBottom: '-2px' }}
+            >
               <ListItemText
                 secondary={
                   <Typography variant="caption">

@@ -11,3 +11,5 @@ export const userOptions = {
   BAN: 'Bank',
   MAKE_ADMIN: 'Make Admin',
 };
+export const TYPING_WAIT_OFFSET = 1500;
+export const MESSAGE_TIME_DISPLAY_OFFSET = 15000;

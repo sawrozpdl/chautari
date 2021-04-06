@@ -38,7 +38,7 @@ const RoomChat: React.FC<any> = (props: any) => {
   const [roomInfo, setRoomInfo] = useState<any>(roomInfoObj);
   const [messages, setMessages] = useState<Array<any>>([]);
 
-  const isAdmin = true || socket.id === roomInfo.admin;
+  const isAdmin = socket.id === roomInfo.admin;
 
   const query = useMemo(() => parseQuery(location.search), [location.search]);
   const messenger = useMemo((): any => new Messenger(socket, settings), [
@@ -134,7 +134,7 @@ const RoomChat: React.FC<any> = (props: any) => {
                   {' '}
                   <Box display="flex" alignItems="center">
                     <Avatar style={{ width: 32, height: 32 }}>
-                      {roomInfo.isPrivate ? <PublicIcon /> : <LockIcon />}
+                      {roomInfo.isPrivate ? <LockIcon /> : <PublicIcon />}
                     </Avatar>
                     <Typography
                       variant="h5"
@@ -147,7 +147,11 @@ const RoomChat: React.FC<any> = (props: any) => {
                 </div>
               )}
             </div>
-            <ChatArea messages={messages} onSend={handleMessageSend} />
+            <ChatArea
+              messages={messages}
+              onSend={handleMessageSend}
+              socket={socket}
+            />
           </Grid>
           <Grid item lg={3} xs={12}>
             {roomInfo?.users && (

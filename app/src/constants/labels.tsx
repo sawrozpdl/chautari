@@ -45,4 +45,8 @@ const chatGuides = [
   'LOL is usually what people reply with when they have nothing else to say.',
 ];
 
-export { form, generic, greetings, interests, chat, chatGuides };
+const display = {
+  SEVERAL_PEOPLE_TYPING: 'Several people are typing...',
+};
+
+export { form, generic, display, greetings, interests, chat, chatGuides };

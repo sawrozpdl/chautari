@@ -1,9 +1,9 @@
 export const roomInfoObj = {
-  roomName: 'Roomie',
-  admin: '123',
+  roomName: 'Roomies',
+  admin: 'ADMINYY',
   isPrivate: false,
   maxUsers: 3,
   key: null,
-  topics: ['ram', 'shyame', 'dhankrish'],
-  users: [{ id: '123', nickname: 'jonas', joinedAt: Date.now() }],
+  topics: ['Music', 'Movies', 'Vsauce'],
+  users: [{ id: 'ADMINYY', nickname: 'Posh', joinedAt: Date.now() }],
 };
