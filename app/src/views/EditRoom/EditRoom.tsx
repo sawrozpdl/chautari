@@ -172,7 +172,6 @@ const EditRoom: React.FC<any> = (props: any) => {
     if (options.hasKey) {
       toGo += `?key=${values.key}`;
     }
-    console.log(values.roomName, toGo);
     history.push(toGo);
   }, [values.roomName, values.key]);
 

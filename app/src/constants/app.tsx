@@ -8,7 +8,7 @@ export const chatMode = {
 export const userOptions = {
   REPORT: 'Report',
   KICK: 'Kick',
-  BAN: 'Bank',
+  BAN: 'Ban',
   MAKE_ADMIN: 'Make Admin',
 };
 export const TYPING_WAIT_OFFSET = 1500;

@@ -93,15 +93,19 @@ const RoomInfo = (props: any): any => {
               {'/'} {info.maxUsers}
             </Typography>
           </ListItem>
-          <ListItem divider={true}>
-            <ListItemText primary={'Topics: '} />
-            <TooltipTruncate
-              max={50}
-              text={listToString(info.topics)}
-              variant="h5"
-              color="inherit"
-            />
-          </ListItem>
+          {info.topics && info.topics.length ? (
+            <ListItem divider={true}>
+              <ListItemText primary={'Topics: '} />
+              <TooltipTruncate
+                max={50}
+                text={listToString(info.topics)}
+                variant="h5"
+                color="inherit"
+              />
+            </ListItem>
+          ) : (
+            <></>
+          )}
         </List>
       </CardContent>
       <CardActions className={classes.actions}>
