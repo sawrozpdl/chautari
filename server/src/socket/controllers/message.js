@@ -16,3 +16,14 @@ export const sendMessage = (data, socket) => {
 
   socket.to(activeRoom).emit(events.MESSAGE, data);
 };
+
+export const typing = (data, socket, { stopped = false }) => {
+  const { id: userId } = socket;
+  const user = getUser(userId);
+  const activeRoom = user.activeRoom;
+
+  socket.to(activeRoom).emit(stopped ? events.STOP_TYPING : events.TYPING, {
+    id: userId,
+    nickname: user.nickname,
+  });
+};

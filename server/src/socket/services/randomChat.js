@@ -49,19 +49,22 @@ export const matchOrJoinQueue = (id) => {
 
 export const leaveRandomChatForUser = (roomName, userId) => {
   const room = getRoom(roomName);
-
   if (!room) return;
 
-  const otherUser = room.users.find((userObj) => roomUserId !== userObj.userId);
+  const otherUserObj = room.users.find((userObj) => userId !== userObj.userId);
 
   deleteRoom(roomName);
-  IO.to(otherUser).emit(events.UNMATCHED, 'OOF');
+
+  if (otherUserObj) {
+    IO.to(otherUserObj.userId).emit(events.UNMATCHED, 'OOF');
+
+    updateUser(otherUserObj.userId, {
+      activeRoom: null,
+      status: userStatus.IDLE,
+    });
+  }
 
   updateUser(userId, {
-    activeRoom: null,
-    status: userStatus.IDLE,
-  });
-  updateUser(otherUser, {
     activeRoom: null,
     status: userStatus.IDLE,
   });
