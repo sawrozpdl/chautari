@@ -6,6 +6,33 @@ export const getRoom = (roomName) => {
   return rooms[roomName];
 };
 
+export const getRooms = (callback, relevantOnly = true, publicOnly = true) => {
+  if (!callback || typeof callback !== 'function') {
+    return rooms;
+  }
+
+  const filtered = [];
+  Object.keys(rooms).forEach((roomName) => {
+    const room = rooms[roomName];
+
+    room.roomName = roomName;
+
+    if (publicOnly && room.isPrivate) {
+      return;
+    }
+
+    const relevancy = callback(room);
+
+    room.relevancy = relevancy;
+
+    if (!relevantOnly || Boolean(relevancy)) {
+      filtered.push(room);
+    }
+  });
+
+  return filtered;
+};
+
 export const joinRoom = (roomName, userId) => {
   rooms[roomName].users.push({ userId, joinedAt: Date.now() });
 };

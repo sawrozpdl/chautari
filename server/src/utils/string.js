@@ -33,3 +33,16 @@ export const getRandomColor = () =>
 export const cleanString = (string) => string.replace(/[|&;$%@"<>()+,]/g, '');
 
 export const getRandomKey = () => Math.random().toString(36).substring(2);
+
+export const commonStrings = (list1, list2) => {
+  const common = [];
+  list1.forEach((item1) => {
+    list2.forEach((item2) => {
+      if (cleanString(item1) === cleanString(item2)) {
+        common.push(item1);
+      }
+    });
+  });
+
+  return common;
+};

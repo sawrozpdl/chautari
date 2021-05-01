@@ -7,6 +7,7 @@ import { events } from '../../constants/socket';
 import { getStats } from '../models/user';
 import { sendMessage, typing } from './message';
 import { connect, update, disconnect } from './stat';
+import { fetchPublicRooms, fetchServerInfo } from './fetch';
 import { joinRandomChat, leaveRandomChat } from './randomChat';
 import { createRoom, requestJoin, joinRoom, leaveRoom } from './roomChat';
 
@@ -44,4 +45,10 @@ export const handleSocketConnection = (socket) => {
   socket.on(events.TYPING, handle(typing, socket));
 
   socket.on(events.STOP_TYPING, handle(typing, socket, { stopped: true }));
+
+  // Fetch events
+
+  socket.on(events.FETCH_SERVER_INFO, handle(fetchServerInfo, socket));
+
+  socket.on(events.FETCH_PUBLIC_ROOM_LIST, handle(fetchPublicRooms, socket));
 };
