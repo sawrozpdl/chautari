@@ -117,7 +117,7 @@ const Setup: React.FC<any> = (props: any) => {
     if (!isFormValid) {
       setShowError(true);
     } else {
-      await updateSettings(values);
+      await updateSettings((settings: any) => ({ ...settings, ...values }));
       toast.success(messages.gameBegin);
       history.push(routes.APP);
     }

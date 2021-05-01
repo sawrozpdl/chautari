@@ -38,7 +38,7 @@ export const SettingsProvider = (props: any): any => {
   const changeSettings = async (
     callback: any = (obj: any): any => obj
   ): Promise<void> => {
-    const newSettings = await callback(settings);
+    const newSettings = await callback(currentSettings);
 
     await setSettings(newSettings);
   };

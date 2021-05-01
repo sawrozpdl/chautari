@@ -35,5 +35,9 @@ export const events = {
   MATCHED: 'matched',
   UNMATCHED: 'unmatched',
 
+  FETCH_PUBLIC_ROOM_LIST: 'fetch public room list',
+  PUBLIC_ROOM_LIST: 'public room list',
+
+  FETCH_SERVER_INFO: 'fetch server info',
   SERVER_INFO: 'server info',
 };

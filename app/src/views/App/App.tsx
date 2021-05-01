@@ -215,7 +215,6 @@ const App: React.FC<any> = (props: any) => {
                   icon={PublicIcon}
                   label={'Browse public rooms'}
                   onClick={handleBrowseRoomClick}
-                  disabled={true} //TODO
                   info="Join public rooms created by other people"
                 />
               </Grid>
