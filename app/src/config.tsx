@@ -17,6 +17,15 @@ const config: any = {
       roomUsers: '/rooms/:roomId/users',
     },
   },
+  ai: {
+    api: {
+      baseUrl: process.env.REACT_APP_AI_API_BASE_URL,
+      endpoints: {
+        ageDetect: '/detect/age',
+        profanityDetect: '/detect/profanity',
+      },
+    },
+  },
   auth: {
     api: {
       baseUrl: process.env.REACT_APP_AUTH_API_BASE_URL,

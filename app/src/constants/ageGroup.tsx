@@ -1,8 +1,14 @@
-export const PRE_TEENAGE = '11-14';
-export const LATE_TEENAGE = '15-17';
-export const PRE_ADULT = '18-22';
-export const MID_ADULT = '23-30';
-export const LATE_ADULT = '31-40';
-export const PRE_OLD = '41-50';
-export const OLD = '51-101';
-export const SELF_REF = 'self';
+const SELF_REF = 'self';
+
+const ageGroup = [
+  '0-2',
+  '4-6',
+  '8-12',
+  '15-20',
+  '25-32',
+  '38-43',
+  '48-53',
+  '60-100',
+];
+
+export { ageGroup as default, SELF_REF };

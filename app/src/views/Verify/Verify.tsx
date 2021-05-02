@@ -1,95 +1,114 @@
-import React from 'react';
-
-import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
+import React, { useState, useContext, useEffect } from 'react';
 
-import { Container, Grid, Typography, makeStyles } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import { Container, makeStyles } from '@material-ui/core';
+
+import alert from '../../utils/alert';
+import toast from '../../utils/toast';
+import routes from '../../constants/routes';
+import { detectAge } from '../../services/ai';
+import SelfieCam from '../../components/SelfieCam';
+import UserContext from '../../context/UserContext';
 
 const Verify: React.FC<any> = (props: any) => {
-  const { className, history, ...rest } = props;
-  const useStyles = makeStyles((theme: any) => ({
+  const { history } = props;
+  const useStyles = makeStyles(() => ({
     root: {
-      paddingTop: 200,
-      minHeight: '100vh',
-      paddingBottom: 200,
-      [theme.breakpoints.down('md')]: {
-        paddingTop: 60,
-        paddingBottom: 60,
-      },
-    },
-    paper: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-    },
-    form: {
-      width: '70%',
-      marginTop: theme.spacing(1),
-      [theme.breakpoints.down('sm')]: {
-        paddingLeft: theme.spacing(2),
-        paddingRight: theme.spacing(2),
-      },
-    },
-    signUpButton: {
-      margin: theme.spacing(2, 0),
-    },
-    textField: {
-      marginTop: theme.spacing(2),
-    },
-    typoSend: {
-      marginTop: theme.spacing(1),
-    },
-    image: {
-      perspectiveOrigin: 'left center',
-      transformStyle: 'preserve-3d',
-      perspective: 1500,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-        transform: 'rotateY(-35deg) rotateX(15deg)',
-        backfaceVisibility: 'hidden',
-        boxShadow: theme.shadows[16],
-      },
-    },
-    shape: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      '& > img': {
-        maxWidth: '90%',
-        height: 'auto',
-      },
+      height: '100%',
+      paddingTop: '40px',
     },
   }));
 
+  const userCtx: any = useContext(UserContext);
+  const { user, updateUser } = userCtx;
+
   const classes: any = useStyles();
 
+  useEffect(() => {
+    if (user.ageGroup) {
+      history.push(routes.APP);
+    }
+  }, [user]);
+
   const handleBackClick = (): void => {
-    history.goBack();
+    alert(
+      `Confirm skip`,
+      `Are you sure you want to skip this verification process as 
+      this might put you on the unsafe side of this application`,
+      () => {
+        history.goBack();
+
+        toast.warning(
+          'Please verify you age for secure experience of this app!'
+        );
+      }
+    );
+  };
+
+  const [isProcessing, setProcessing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleImageProcess = async (image: any): Promise<void> => {
+    setProcessing(true);
+
+    try {
+      const { data } = await detectAge(image);
+
+      if (data.status === 'Success') {
+        if (data.result?.length === 1) {
+          updateUser({ ageGroup: data.result[0] });
+          toast.success('Age verification success!');
+
+          history.push(routes.APP);
+        } else {
+          setError('There should be only one face vibile on the screen!');
+          toast.warning('Many faces detected!');
+        }
+      } else {
+        setError(
+          "This image didn't work, Make sure your overall face is visible"
+        );
+        toast.error('Age verification failed !');
+      }
+    } catch (_) {
+      toast.error('Unknown error occurred!');
+    }
+
+    setProcessing(false);
+  };
+
+  const handleRetry = (): void => {
+    setError(null);
+  };
+
+  const handleExit = (): void => {
+    handleBackClick();
   };
 
   return (
-    <div className={clsx(classes.root, className)} {...rest}>
-      <Container maxWidth="lg">
-        <Grid container spacing={3}>
-          <Grid item lg={6} xs={12}>
-            <Button
-              variant="outlined"
-              onClick={handleBackClick}
-              color="primary"
-            >
-              Back
-            </Button>
-          </Grid>
-          <Grid item lg={12} xs={12}>
-            <Typography variant="h1">
-              {'This page is under construction!'}
-            </Typography>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+    <Container component="main" maxWidth="md" className={classes.root}>
+      <div className={classes.content}>
+        <Button
+          variant="outlined"
+          onClick={handleBackClick}
+          className={classes.backBtn}
+          color="secondary"
+        >
+          Back
+        </Button>
+      </div>
+      <div>
+        <SelfieCam
+          isProcessing={isProcessing}
+          onProcess={handleImageProcess}
+          onExit={handleExit}
+          onRetry={handleRetry}
+          error={error}
+          labels={{ title: 'Age verification', exit: 'Skip', use: 'Proceed' }}
+        />
+      </div>
+    </Container>
   );
 };
 

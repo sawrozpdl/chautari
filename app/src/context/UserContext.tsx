@@ -32,7 +32,7 @@ const UserProvider = (props: any): any => {
   };
 
   const handleLogout = (): void => {
-    setUser(GuestUser);
+    setUser((oldUser) => ({ ...GuestUser, ageGroup: oldUser.ageGroup }));
   };
 
   return (

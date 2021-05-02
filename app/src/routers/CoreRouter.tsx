@@ -1,6 +1,8 @@
 import React, { Suspense, useContext, useEffect } from 'react';
 
 import PropType from 'prop-types';
+import ReportIcon from '@material-ui/icons/Report';
+import { Fab, Typography } from '@material-ui/core';
 import { Switch, Redirect } from 'react-router-dom';
 
 import toast from '../utils/toast';
@@ -57,6 +59,10 @@ const CoreRouter: React.FC<any> = (props: any): any => {
     };
   }, [socket, hasSetup]);
 
+  const goToVerification = (): void => {
+    history.push(routes.VERIFY);
+  };
+
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Switch>
@@ -106,6 +112,27 @@ const CoreRouter: React.FC<any> = (props: any): any => {
         />
         <Redirect to={routes.APP} />
       </Switch>
+
+      {!user.ageGroup && (
+        <Fab
+          variant="extended"
+          size="medium"
+          color="secondary"
+          onClick={goToVerification}
+          aria-label="add"
+          style={{
+            margin: '12px',
+            position: 'absolute',
+            bottom: '12px',
+            right: '12px',
+          }}
+        >
+          <ReportIcon style={{ marginRight: '6px' }} />
+          <Typography variant="body2" color={'inherit'}>
+            {'Verify age'}
+          </Typography>
+        </Fab>
+      )}
     </Suspense>
   );
 };

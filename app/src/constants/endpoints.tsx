@@ -16,3 +16,6 @@ export const ROOMS_URL = `${config.api.baseUrl}/api${config.api.endpoints.rooms}
 export const ROOM_USERS_URL = `${config.api.baseUrl}/api${config.api.endpoints.roomUsers}`;
 export const USER_SETTINGS_URL = `${config.api.baseUrl}/api${config.api.endpoints.userSettings}`;
 export const SELF_SETTINGS_URL = `${config.api.baseUrl}/api${config.api.endpoints.selfSettings}`;
+
+export const AGE_DETECT_URL = `${config.ai.api.baseUrl}${config.ai.api.endpoints.ageDetect}`;
+export const PROFANITY_DETECT_URL = `${config.ai.api.baseUrl}${config.ai.api.endpoints.profanityDetect}`;
