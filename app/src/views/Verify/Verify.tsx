@@ -58,18 +58,18 @@ const Verify: React.FC<any> = (props: any) => {
       if (data.status === 'Success') {
         if (data.result?.length === 1) {
           updateUser({ ageGroup: data.result[0] });
-          toast.success('Age verification success!');
+          toast.success('Age verification successful!');
 
           history.push(routes.APP);
         } else {
-          setError('There should be only one face vibile on the screen!');
+          setError('There should be only one face visible on the screen!');
           toast.warning('Many faces detected!');
         }
       } else {
         setError(
           "This image didn't work, Make sure your overall face is visible"
         );
-        toast.error('Age verification failed !');
+        toast.error('Age verification failed!');
       }
     } catch (_) {
       toast.error('Unknown error occurred!');
