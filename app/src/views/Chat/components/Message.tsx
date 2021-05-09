@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 
 import { ListItem, Grid, ListItemText, Typography } from '@material-ui/core';
 
 import Markdown from '../../../components/Markdown';
+import { detectProfanity } from '../../../services/ai';
 
 const Info = (props: any): any => {
   const { time, data } = props;
@@ -38,12 +39,26 @@ const Message = (props: any): any => {
     isFromSelf = true,
     color,
     time,
+    censor = false,
     showTime = true,
     isMd,
     isInfo,
     component: Component,
     ...rest
   } = props;
+
+  const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    if (!isInfo && censor) {
+      detectProfanity(data).then((dta) => {
+        setMessage(dta.filtered);
+      });
+    } else {
+      setMessage(data);
+    }
+  }, [data, censor, isInfo]);
+
   return (
     <ListItem>
       {Component ? (
@@ -72,7 +87,15 @@ const Message = (props: any): any => {
               primary={
                 <Typography variant="h3">
                   {' '}
-                  {isMd ? <Markdown text={data} /> : data}
+                  {message ? (
+                    isMd && !censor ? (
+                      <Markdown text={message} />
+                    ) : (
+                      message
+                    )
+                  ) : (
+                    '...'
+                  )}
                 </Typography>
               }
             />

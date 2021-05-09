@@ -12,7 +12,7 @@ import { TYPING_WAIT_OFFSET } from '../../../constants/app';
 import { chat as chatLabels, display } from '../../../constants/labels';
 
 const ChatArea = (props: any): any => {
-  const { messages, onSend, socket, active = true } = props;
+  const { messages, onSend, socket, censor = false, active = true } = props;
 
   const [text, setText] = useState('');
 
@@ -131,7 +131,7 @@ const ChatArea = (props: any): any => {
 
   return (
     <div>
-      <Messages items={messages} extended={!active} />
+      <Messages items={messages} extended={!active} censor={censor} />
       {active && (
         <Grid container style={{ padding: '20px' }} spacing={2}>
           <Grid

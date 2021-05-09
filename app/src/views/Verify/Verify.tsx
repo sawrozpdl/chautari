@@ -53,10 +53,11 @@ const Verify: React.FC<any> = (props: any) => {
     setProcessing(true);
 
     try {
-      const { data } = await detectAge(image);
+      const data = await detectAge(image);
 
       if (data.status === 'Success') {
         if (data.result?.length === 1) {
+          console.log(`Set age group: ${data.result[0]}`);
           updateUser({ ageGroup: data.result[0] });
           toast.success('Age verification successful!');
 

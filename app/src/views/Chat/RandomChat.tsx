@@ -42,6 +42,9 @@ const RandomChat: React.FC<any> = (props: any) => {
   const isInterestBased =
     settings.interestMatching && Boolean(settings.interests.length);
 
+  const isAgeBased =
+    settings.ageGroupMatching && Boolean(settings.user.ageGroup);
+
   const messenger = useMemo((): any => new Messenger(socket, settings), [
     socket,
     settings,
@@ -204,6 +207,19 @@ const RandomChat: React.FC<any> = (props: any) => {
                     >
                       {partner.nickname}
                     </Typography>
+                    {isAgeBased && (
+                      <Typography
+                        variant="caption"
+                        color="textSecondary"
+                        style={{
+                          marginLeft: '5px',
+                          position: 'relative',
+                          bottom: '5px',
+                        }}
+                      >
+                        {'Age Buddy'}
+                      </Typography>
+                    )}
                   </Box>
                   {commonInterests && commonInterests.length ? (
                     <Typography
@@ -230,6 +246,7 @@ const RandomChat: React.FC<any> = (props: any) => {
             <Grid item lg={12} xs={12}>
               <ChatArea
                 messages={messages}
+                censor={settings.safeMode}
                 active={Boolean(partner) && !stopped}
                 onSend={handleMessageSend}
                 socket={socket}

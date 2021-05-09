@@ -10,12 +10,12 @@ import { AGE_DETECT_URL, PROFANITY_DETECT_URL } from '../constants/endpoints';
  */
 export async function detectAge(image: any): Promise<any> {
   const blob = dataURLtoBlob(image);
-  const data = new FormData();
-  data.append('image', blob);
+  const form = new FormData();
+  form.append('image', blob);
 
-  const res = await http.post(AGE_DETECT_URL, { body: data });
+  const { data } = await http.post(AGE_DETECT_URL, { body: form });
 
-  return res;
+  return data;
 }
 
 /**
@@ -24,7 +24,7 @@ export async function detectAge(image: any): Promise<any> {
  * @param string
  */
 export async function detectProfanity(string: string): Promise<any> {
-  const res = await http.get(`${PROFANITY_DETECT_URL}?string=${string}`);
+  const { data } = await http.get(`${PROFANITY_DETECT_URL}?string=${string}`);
 
-  return res;
+  return data;
 }

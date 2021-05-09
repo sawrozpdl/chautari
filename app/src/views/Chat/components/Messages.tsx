@@ -6,7 +6,7 @@ import Message from './Message';
 import { MESSAGE_TIME_DISPLAY_OFFSET } from '../../../constants/app';
 
 const Messages = (props: any): any => {
-  const { items, className, extended } = props;
+  const { items, className, extended, censor } = props;
 
   let shownTime = 0;
 
@@ -27,6 +27,7 @@ const Messages = (props: any): any => {
       {items.map((message: any, index: number) => (
         <Message
           key={index}
+          censor={censor}
           {...message}
           showTime={shouldShowTime(message.time)}
         />

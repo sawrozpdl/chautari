@@ -149,6 +149,7 @@ const RoomChat: React.FC<any> = (props: any) => {
             </div>
             <ChatArea
               messages={messages}
+              censor={settings.safeMode}
               onSend={handleMessageSend}
               socket={socket}
             />
