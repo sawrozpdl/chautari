@@ -84,8 +84,21 @@ export const logoutUser = (userId, callback) => {
 
 export const getMatchPercentage = (user1, user2) => {
   let matches = 0;
-  const user1Interests = users[user1].interests;
-  const user2Interests = users[user2].interests;
+
+  const user1Settings = users[user1];
+  const user2Settings = users[user2];
+  const { interests: user1Interests } = user1Settings;
+  const { interests: user2Interests } = user2Settings;
+
+  if (
+    (!user1Settings.ageGroupMatching && user2Settings.ageGroupMatching) ||
+    (user1Settings.ageGroupMatching && !user2Settings.ageGroupMatching) ||
+    (user1Settings.ageGroupMatching &&
+      user2Settings.ageGroupMatching &&
+      user1Settings.user.ageGroup !== user2Settings.user.ageGroup)
+  ) {
+    return 0;
+  }
 
   user1Interests.forEach((interest1) => {
     user2Interests.forEach((interest2) => {
