@@ -1,18 +1,22 @@
 import logger from '../../utils/logger';
+import { notify } from '../services/notify';
+import { isBanned } from '../models/server';
 import { getRoom, getStats } from '../models/room';
 import { leaveRoomForUser } from '../services/roomChat';
 import { events, userStatus } from '../../constants/socket';
 import { leaveRandomChatForUser } from '../services/randomChat';
-import { getUser, logoutUser, registerUser, setUser } from '../models/user';
+import { getUser, logoutUser, registerUser, updateUser } from '../models/user';
 
 export const connect = (data, socket) => {
-  const { id: userId } = socket;
-  registerUser(userId, data);
+  const { id: userId, request } = socket;
+  const { remoteAddress: ip } = request.connection;
+
+  registerUser(userId, data, ip);
 };
 
 export const update = (data, socket) => {
   const { id: userId } = socket;
-  setUser(userId, data);
+  updateUser(userId, data);
 };
 
 const _leaveInvolvedRoom = (socket, userId, consented) => {

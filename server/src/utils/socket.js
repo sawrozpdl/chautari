@@ -1,12 +1,23 @@
 import logger from './logger';
 import { messageTypes } from '../constants/socket';
 import { notify } from '../socket/services/notify';
+import { isBanned } from '../socket/models/server';
 
-export const handle = (controller, socket, props = {}) => {
-  const { id: userId } = socket;
+export const handle = (controller, socket, props = {}, validate = true) => {
+  const { id: userId, request } = socket;
+  const { remoteAddress: ip } = request.connection;
+
   return (data) => {
     try {
-      controller(data, socket, props);
+      if (validate && isBanned(ip)) {
+        notify(userId, {
+          type: 'error',
+          message: 'You have been banned from the server!',
+          requestId: data?.requestId,
+        });
+      } else {
+        controller(data, socket, props);
+      }
     } catch (E) {
       logger.error(E);
 
@@ -14,7 +25,7 @@ export const handle = (controller, socket, props = {}) => {
 
       return notify(userId, {
         type: messageTypes.ERROR,
-        text: 'Internal server error!',
+        message: 'Internal server error!',
         requestId: data?.requestId,
       });
     }

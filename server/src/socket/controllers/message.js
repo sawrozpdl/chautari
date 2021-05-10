@@ -9,7 +9,7 @@ export const sendMessage = (data, socket) => {
   if (!activeRoom) {
     return notify(userId, {
       type: messageTypes.ERROR,
-      text: "You aren't in a room,talking to ghosts now are we?",
+      message: "You aren't in a room,talking to ghosts now are we?",
       requestId: data?.requestId,
     });
   }

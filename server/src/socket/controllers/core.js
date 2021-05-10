@@ -6,6 +6,7 @@ import { events } from '../../constants/socket';
 
 import { getStats } from '../models/user';
 import { sendMessage, typing } from './message';
+import { ackLeave, userActions } from './actions';
 import { connect, update, disconnect } from './stat';
 import { fetchPublicRooms, fetchServerInfo } from './fetch';
 import { joinRandomChat, leaveRandomChat } from './randomChat';
@@ -19,6 +20,8 @@ export const handleSocketConnection = (socket) => {
   socket.on(events.HELLO, handle(connect, socket));
 
   socket.on(events.UPDATE, handle(update, socket));
+
+  socket.on(events.ACK_LEAVE, handle(ackLeave, socket));
 
   socket.on(events.BYE, handle(disconnect, socket, { consented: true }));
 
@@ -45,6 +48,10 @@ export const handleSocketConnection = (socket) => {
   socket.on(events.TYPING, handle(typing, socket));
 
   socket.on(events.STOP_TYPING, handle(typing, socket, { stopped: true }));
+
+  // Action events:
+
+  socket.on(events.USER_ACTION, handle(userActions, socket));
 
   // Fetch events
 

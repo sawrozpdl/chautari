@@ -51,9 +51,10 @@ export const getPublicUserInfo = ({ userId, joinedAt }) => {
   return withAttrs(userSettings, publicSettingsAttrs);
 };
 
-export const registerUser = (id, settings) => {
+export const registerUser = (id, settings, ip) => {
   settings.status = userStatus.IDLE;
   settings.activeRoom = null;
+  settings.ip = ip;
   settings.subscriptions = [];
   users[id] = settings;
 
