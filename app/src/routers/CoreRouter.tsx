@@ -54,6 +54,19 @@ const CoreRouter: React.FC<any> = (props: any): any => {
       history.push(routes.APP);
     });
 
+    socket?.on(events.BANNED_FROM_SERVER, (): void => {
+      toast.info(`You have been banned out from this server!`);
+      socket.emit(events.ACK_LEAVE, {});
+    });
+
+    socket?.on(events.REPORTED, (): void => {
+      toast.info(`User has been reported!`);
+    });
+
+    socket?.on(events.PRIVATE_MESSAGE, (data: any): void => {
+      toast[data.type || 'info'](data.message);
+    });
+
     return (): void => {
       // socket?.emit(events.BYE, true);
     };

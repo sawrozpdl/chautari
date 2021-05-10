@@ -18,6 +18,7 @@ import { roomInfoObj } from '../../mocks/room';
 import { events } from '../../constants/socket';
 import { ChatArea, RoomInfo } from './components';
 import PublicIcon from '@material-ui/icons/Public';
+import { userActionResponses } from '../../constants/labels';
 import { interpolate, parseQuery } from '../../utils/string';
 import routes, { roomOptions } from '../../constants/routes';
 
@@ -31,9 +32,6 @@ const RoomChat: React.FC<any> = (props: any) => {
     location,
     ...rest
   } = props;
-  const useStyles = makeStyles((theme: any) => ({}));
-
-  const classes: any = useStyles();
 
   const [roomInfo, setRoomInfo] = useState<any>(roomInfoObj);
   const [messages, setMessages] = useState<Array<any>>([]);
@@ -76,6 +74,30 @@ const RoomChat: React.FC<any> = (props: any) => {
       setRoomInfo(info);
     });
 
+    socket.on(events.USER_ACTION_RESULT, (data: any) => {
+      const responses: any = userActionResponses[data.result];
+
+      toast[responses.code](responses[data.action]);
+    });
+
+    socket.on(events.KICKED, (): void => {
+      toast.info(`You have been kicked out from ${roomName}`);
+
+      handleBackClick();
+      socket.emit(events.ACK_LEAVE, {});
+    });
+
+    socket.on(events.BANNED_FROM_ROOM, (): void => {
+      toast.info(`You have been banned out from ${roomName}`);
+
+      handleBackClick();
+      socket.emit(events.ACK_LEAVE, {});
+    });
+
+    socket.on(events.PROMOTED, (): void => {
+      toast.info(`You are the new room admin!`);
+    });
+
     socket.on(events.JOIN_REQUEST_REJECTED, (data: any) => {
       toast.error(data?.text || 'Join request rejected!');
 
@@ -100,6 +122,10 @@ const RoomChat: React.FC<any> = (props: any) => {
     if (callback) {
       callback();
     }
+  };
+
+  const handleUserAction = (action: string, user: string): void => {
+    socket.emit(events.USER_ACTION, { action, user });
   };
 
   return (
@@ -156,7 +182,12 @@ const RoomChat: React.FC<any> = (props: any) => {
           </Grid>
           <Grid item lg={3} xs={12}>
             {roomInfo?.users && (
-              <UserList users={roomInfo.users} adminTools={isAdmin} />
+              <UserList
+                self={socket.id}
+                onAction={handleUserAction}
+                users={roomInfo.users}
+                adminTools={isAdmin}
+              />
             )}
           </Grid>
         </Grid>

@@ -20,6 +20,7 @@ import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import ReportIcon from '@material-ui/icons/Report';
 import { getHashAvatar } from '../../../utils/user';
 import { userOptions } from '../../../constants/app';
+import { userActions } from '../../../constants/socket';
 import { GenericMoreButton } from '../../../components';
 import SmartAvatar from '../../../components/SmartAvatar';
 
@@ -37,38 +38,33 @@ const useStyles = makeStyles((theme: any) => ({
 }));
 
 const baseOptions = {
-  [userOptions.REPORT]: ReportIcon,
+  [userOptions.REPORT]: { action: userActions.REPORT_USER, Icon: ReportIcon },
 };
 
 const adminOptions = {
-  [userOptions.MAKE_ADMIN]: KeyboardArrowUpIcon,
-  [userOptions.KICK]: EjectIcon,
-  [userOptions.BAN]: BlockIcon,
+  [userOptions.MAKE_ADMIN]: {
+    action: userActions.PROMOTE_USER,
+    Icon: KeyboardArrowUpIcon,
+  },
+  [userOptions.KICK]: { action: userActions.KICK_USER, Icon: EjectIcon },
+  [userOptions.BAN]: { action: userActions.BAN_USER, Icon: BlockIcon },
 };
 
 const UserList = (props: any): any => {
-  const { className, users, adminTools = false, ...rest } = props;
+  const {
+    className,
+    self,
+    onAction,
+    users,
+    adminTools = false,
+    ...rest
+  } = props;
 
   const classes: any = useStyles();
 
   const options = {
     ...baseOptions,
     ...(adminTools && adminOptions),
-  };
-
-  const handleOptionClick = (option: string, value: any): void => {
-    switch (option) {
-      case userOptions.REPORT:
-        break;
-      case userOptions.MAKE_ADMIN:
-        break;
-      case userOptions.KICK:
-        break;
-      case userOptions.BAN:
-        break;
-      default:
-        break;
-    }
   };
 
   return (
@@ -88,14 +84,18 @@ const UserList = (props: any): any => {
                 {userObj.nickname.charAt(0)}
               </SmartAvatar>
               <ListItemText
-                primary={userObj.nickname}
+                primary={
+                  userObj.nickname + (self === userObj.id ? ' (You)' : '')
+                }
                 secondary={`Joined ${moment(userObj.joinedAt).fromNow()}`}
               />
-              <GenericMoreButton
-                value={userObj.id}
-                options={options}
-                onOptionClick={handleOptionClick}
-              />
+              {self !== userObj.id && (
+                <GenericMoreButton
+                  value={userObj.id}
+                  options={options}
+                  onOptionClick={onAction}
+                />
+              )}
             </ListItem>
           ))}
         </List>
@@ -106,7 +106,9 @@ const UserList = (props: any): any => {
 };
 
 UserList.propTypes = {
+  self: PropTypes.string,
   className: PropTypes.string,
+  onAction: PropTypes.func,
   users: PropTypes.array,
   adminTools: PropTypes.bool,
 };

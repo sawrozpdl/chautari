@@ -54,12 +54,12 @@ const GenericMoreButton = (props: any): any => {
         }}
       >
         {Object.keys(options).map((option, index) => {
-          const Icon = options[option];
+          const { action, Icon } = options[option];
           return (
             <MenuItem
               key={index}
               onClick={(): void => {
-                onOptionClick(option, value);
+                onOptionClick(action, value);
               }}
             >
               <ListItemIcon>

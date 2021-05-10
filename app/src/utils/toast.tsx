@@ -74,6 +74,6 @@ const error = (message: string): void => createToast('error', message);
 const warning = (message: string): void => createToast('warning', message);
 const info = (message: string): void => createToast('info', message);
 
-const toast = { success, error, warning, info };
+const toast: any = { success, error, warning, info };
 
 export default toast;
