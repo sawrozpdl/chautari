@@ -13,6 +13,7 @@ export const handle = (controller, socket, props = {}, validate = true) => {
         notify(userId, {
           type: 'error',
           message: 'You have been banned from the server!',
+          noAccess: true,
           requestId: data?.requestId,
         });
       } else {

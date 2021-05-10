@@ -2,8 +2,28 @@ import { getPublicUserInfo, getUser, users } from './user';
 
 const rooms = {};
 
-export const getRoom = (roomName) => {
-  return rooms[roomName];
+export const getRoom = (roomName, key) => {
+  return key ? rooms[roomName][key] : rooms[roomName];
+};
+
+export const updateRoom = (roomName, roomData) => {
+  const room = rooms[roomName];
+  if (!room) {
+    return false;
+  }
+
+  rooms[roomName] = { ...room, ...roomData };
+};
+
+export const patchRoom = (roomName, key, value) => {
+  const room = rooms[roomName];
+  if (!room) {
+    return false;
+  }
+
+  room[key] = value;
+
+  return true;
 };
 
 export const getRooms = (callback, relevantOnly = true, publicOnly = true) => {
@@ -39,6 +59,20 @@ export const joinRoom = (roomName, userId) => {
 
 export const roomExists = (roomName) => {
   return roomName in rooms;
+};
+
+export const banIPInRoom = (roomName, ip) => {
+  const room = rooms[roomName];
+
+  if (room?.bannedIPs) {
+    room.bannedIPs.push(ip);
+  }
+};
+
+export const isBannedInRoom = (roomName, ip) => {
+  const room = rooms[roomName];
+
+  return room?.bannedIPs?.includes(ip);
 };
 
 export const buildRoom = (roomName, settings) => {

@@ -4,9 +4,9 @@ import {
   publicUserAttrs,
 } from '../../constants/socket';
 import logger from '../../utils/logger';
-import { removeUserFromRoom } from './room';
 import { withAttrs } from '../../utils/object';
 import { cleanString } from '../../utils/string';
+import { getRoom, removeUserFromRoom } from './room';
 import { getQueueForUser, leaveQueue } from './queue';
 
 const users = {};
@@ -38,6 +38,10 @@ export const setUser = (id, settings) => {
   users[id] = settings;
 };
 
+export const isAdmin = (id) => {
+  return getRoom(getUser(id, 'activeRoom'), 'admin') === id;
+};
+
 export const getPublicUserInfo = ({ userId, joinedAt }) => {
   const userSettings = users[userId];
 
@@ -51,12 +55,15 @@ export const getPublicUserInfo = ({ userId, joinedAt }) => {
   return withAttrs(userSettings, publicSettingsAttrs);
 };
 
+const baseSettings = {
+  status: userStatus.IDLE,
+  activeRoom: null,
+  reports: [],
+  subscriptions: [],
+};
+
 export const registerUser = (id, settings, ip) => {
-  settings.status = userStatus.IDLE;
-  settings.activeRoom = null;
-  settings.ip = ip;
-  settings.subscriptions = [];
-  users[id] = settings;
+  users[id] = { ...settings, ...baseSettings, ip };
 
   stats.idle++;
 };
@@ -66,6 +73,22 @@ export const updateUser = (id, curr) => {
   users[id] = { ...prev, ...curr };
 
   _updateStats(prev, curr);
+};
+
+export const reportUser = (id, from) => {
+  const user = users[id];
+
+  if (!user) {
+    return -1;
+  }
+
+  if (user.reports.includes(from)) {
+    return -2;
+  }
+
+  user.reports.push(from);
+
+  return user.reports.length;
 };
 
 export const logoutUser = (userId, callback) => {

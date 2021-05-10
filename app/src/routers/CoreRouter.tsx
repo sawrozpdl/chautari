@@ -46,6 +46,8 @@ const CoreRouter: React.FC<any> = (props: any): any => {
 
     socket?.on(events.CONNECT, () => {
       socket.emit(events.HELLO, userSettings);
+
+      toast.info('Connected to the server!');
     });
 
     socket?.on(events.DISCONNECT, () => {
@@ -55,7 +57,7 @@ const CoreRouter: React.FC<any> = (props: any): any => {
     });
 
     socket?.on(events.BANNED_FROM_SERVER, (): void => {
-      toast.info(`You have been banned out from this server!`);
+      toast.info(`You have been banned from this server!`);
       socket.emit(events.ACK_LEAVE, {});
     });
 
@@ -65,6 +67,10 @@ const CoreRouter: React.FC<any> = (props: any): any => {
 
     socket?.on(events.PRIVATE_MESSAGE, (data: any): void => {
       toast[data.type || 'info'](data.message);
+
+      if (data.noAccess) {
+        history.push(routes.APP);
+      }
     });
 
     return (): void => {

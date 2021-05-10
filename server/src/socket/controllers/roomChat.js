@@ -1,8 +1,8 @@
 import IO from '../../socket';
 import logger from '../../utils/logger';
 import { notify } from '../services/notify';
-import { updateUser, getUser } from '../models/user';
 import Notification from '../models/notification';
+import { updateUser, getUser } from '../models/user';
 import { leaveRoomForUser } from '../services/roomChat';
 import {
   deleteRoom,
@@ -10,6 +10,7 @@ import {
   buildRoom,
   getStats,
   roomExists,
+  isBannedInRoom,
 } from '../models/room';
 import { events, messageTypes, userStatus } from '../../constants/socket';
 
@@ -33,6 +34,7 @@ export const createRoom = (data, socket) => {
     topics,
     admin: userId,
     isPrivate,
+    bannedIPs: [],
     createdAt: Date.now(),
   });
 
@@ -54,6 +56,10 @@ export const requestJoin = (data, socket, params, callback) => {
   const hasError = notification.switch({
     'You wanna join void? *loads gun*': !roomName,
     "Aye, that room doesn't exist lol": !room,
+    'You have been banned from this room!': isBannedInRoom(
+      roomName,
+      getUser(userId, 'ip')
+    ),
     "That key ain't right, I am calling 911":
       room && room.key && room.key !== enteringKey,
     'You are already in this room!': room && room.users.includes(userId),
