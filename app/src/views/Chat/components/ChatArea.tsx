@@ -1,9 +1,16 @@
 import React, { useEffect, useMemo, useState, useCallback } from 'react';
 
+import Tenor from 'react-tenor';
+
 import SendIcon from '@material-ui/icons/Send';
-import { Button, Grid, TextField, Typography } from '@material-ui/core';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import { Button, Grid, TextField, Typography, Paper } from '@material-ui/core';
+
+import 'react-tenor/dist/styles.css';
 
 import Messages from './Messages';
+import config from '../../../config';
 import debounce from '../../../utils/debounce';
 import { events } from '../../../constants/socket';
 import { listToString } from '../../../utils/string';
@@ -67,17 +74,32 @@ const ChatArea = (props: any): any => {
     }
   }, [messages.length]);
 
+  const [mode, setMode] = useState(1);
+
+  const handleModeToggle = (event: any, newMode: number): void => {
+    setMode(newMode);
+  };
+
   const handleSendClick = (): void => {
     const isFormValid = validate();
     if (!isFormValid) {
       setShowError(true);
     } else {
-      onSend(text, () => {
-        setText('');
-      });
+      onSend(
+        text,
+        () => {
+          setText('');
+        },
+        mode === 2
+      );
 
       socket.emit(events.STOP_TYPING);
     }
+  };
+
+  const handleGifSelect = (obj: any): void => {
+    onSend(obj.media[0].tinygif.url, null, false, mode === 3);
+    setMode(1);
   };
 
   const startTyping = useCallback(
@@ -139,14 +161,55 @@ const ChatArea = (props: any): any => {
             xs={12}
             style={{
               position: 'relative',
-              top: '12px',
-              left: '12px',
-              height: '36px',
+              display: 'flex',
+              justifyContent: 'space-between',
             }}
           >
-            {typingText && (
-              <Typography variant="subtitle2">{typingText} </Typography>
-            )}
+            <div
+              style={{
+                position: 'relative',
+                left: '12px',
+                top: '36px',
+              }}
+            >
+              <Typography variant="subtitle2">{typingText || ' '} </Typography>
+            </div>
+            <div>
+              {mode === 3 && (
+                <Paper
+                  style={{
+                    position: 'absolute',
+                    bottom: '0px',
+                    height: '492px',
+                    right: '0px',
+                    width: '480px',
+                    display: 'inline-block',
+                  }}
+                >
+                  <Tenor
+                    autoFocus={true}
+                    token={config.app.tenorApiKey}
+                    onSelect={handleGifSelect}
+                  />
+                </Paper>
+              )}
+              <ToggleButtonGroup
+                value={mode}
+                exclusive
+                onChange={handleModeToggle}
+                aria-label="text alignment"
+              >
+                <ToggleButton value={1} aria-label="left aligned">
+                  {'TEXT'}
+                </ToggleButton>
+                <ToggleButton value={2} aria-label="centered">
+                  {'MD'}
+                </ToggleButton>
+                <ToggleButton value={3} aria-label="right aligned">
+                  {'GIF'}
+                </ToggleButton>
+              </ToggleButtonGroup>
+            </div>
           </Grid>
           <Grid item xs={11}>
             <TextField

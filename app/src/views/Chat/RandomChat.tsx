@@ -154,8 +154,13 @@ const RandomChat: React.FC<any> = (props: any) => {
     };
   }, []);
 
-  const handleMessageSend = (message: string, callback: any): void => {
-    messenger.text(message).md(true);
+  const handleMessageSend = (
+    message: string,
+    callback: any,
+    isMd = false,
+    isGif = false
+  ): void => {
+    messenger[isGif ? 'gif' : 'text'](message).md(isMd);
 
     setMessages((messages) => [...messages, messenger.self(true).build()]);
 

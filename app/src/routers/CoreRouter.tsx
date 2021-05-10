@@ -1,9 +1,10 @@
-import React, { Suspense, useContext, useEffect } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 
 import PropType from 'prop-types';
-import ReportIcon from '@material-ui/icons/Report';
-import { Fab, Typography } from '@material-ui/core';
 import { Switch, Redirect } from 'react-router-dom';
+
+import ReportIcon from '@material-ui/icons/Report';
+import { Fab, Typography, Paper, Tooltip } from '@material-ui/core';
 
 import toast from '../utils/toast';
 import { useSocket } from '../hooks';
@@ -25,6 +26,11 @@ import {
   RoomList,
 } from '../views';
 
+const defaultState = {
+  rooms: { totalRooms: 0 },
+  users: { inQueue: 0, idle: 1, inRoom: 0 },
+};
+
 const CoreRouter: React.FC<any> = (props: any): any => {
   const socket = useSocket(API_BASE_URL);
 
@@ -36,6 +42,8 @@ const CoreRouter: React.FC<any> = (props: any): any => {
   const { settings } = useSettings();
 
   const userSettings = getPublicSettings(settings, user);
+
+  const [serverState, setSeverState] = useState(defaultState);
 
   const hasSetup = settings.nickname && settings.nickname !== GUEST;
 
@@ -54,6 +62,10 @@ const CoreRouter: React.FC<any> = (props: any): any => {
       toast.error('You got disconnected from the server!');
 
       history.push(routes.APP);
+    });
+
+    socket?.on(events.SERVER_INFO, (data: any) => {
+      setSeverState(data);
     });
 
     socket?.on(events.BANNED_FROM_SERVER, (): void => {
@@ -81,6 +93,8 @@ const CoreRouter: React.FC<any> = (props: any): any => {
   const goToVerification = (): void => {
     history.push(routes.VERIFY);
   };
+
+  const { rooms, users } = serverState;
 
   return (
     <Suspense fallback={<LoadingScreen />}>
@@ -152,6 +166,40 @@ const CoreRouter: React.FC<any> = (props: any): any => {
           </Typography>
         </Fab>
       )}
+
+      <Paper
+        style={{
+          padding: '12px',
+          borderRadius: '6px',
+          margin: '12px',
+          position: 'absolute',
+          bottom: '12px',
+          left: '12px',
+        }}
+      >
+        <Typography variant="body2" color={'inherit'}>
+          {rooms.totalRooms + ' Rooms'}
+        </Typography>
+        <Tooltip
+          title={
+            <div>
+              <Typography variant="body2" color={'inherit'}>
+                {users.idle + ' Idle'}
+              </Typography>
+              <Typography variant="body2" color={'inherit'}>
+                {users.inQueue + ' in Queue'}
+              </Typography>
+              <Typography variant="body2" color={'inherit'}>
+                {users.inRoom + ' in Room'}
+              </Typography>
+            </div>
+          }
+        >
+          <Typography variant="body2" color={'inherit'}>
+            {users.idle + users.inQueue + users.inRoom + ' Online'}
+          </Typography>
+        </Tooltip>
+      </Paper>
     </Suspense>
   );
 };

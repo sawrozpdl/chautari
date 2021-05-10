@@ -7,6 +7,7 @@ const config: any = {
   app: {
     baseUrl: process.env.REACT_APP_BASE_URL,
     name: appName,
+    tenorApiKey: process.env.REACT_APP_TENOR_API_KEY,
   },
   api: {
     baseUrl: process.env.REACT_APP_API_BASE_URL,

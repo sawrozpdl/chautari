@@ -3,6 +3,7 @@ export { default as Modal } from './Modal';
 export { default as Topbar } from './topbar';
 export { default as Loading } from './Loading';
 export { default as TabView } from './TabView';
+export { default as ImageView } from './ImageView';
 export { default as Pagination } from './Pagination';
 export { default as NamePicker } from './NamePicker';
 export { default as SearchInput } from './SearchInput';

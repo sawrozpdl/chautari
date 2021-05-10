@@ -68,11 +68,13 @@ export const registerUser = (id, settings, ip) => {
   stats.idle++;
 };
 
-export const updateUser = (id, curr) => {
+export const updateUser = (id, curr, updateStats = true) => {
   const prev = users[id];
   users[id] = { ...prev, ...curr };
 
-  _updateStats(prev, curr);
+  if (updateStats) {
+    _updateStats(prev, curr);
+  }
 };
 
 export const reportUser = (id, from) => {

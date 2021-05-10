@@ -1,3 +1,5 @@
+export const user1 = { id: 'ADMINYY', nickname: 'Posh', joinedAt: Date.now() };
+
 export const roomInfoObj = {
   roomName: 'Roomies',
   admin: 'ADMINYY',
@@ -6,5 +8,5 @@ export const roomInfoObj = {
   key: null,
   topics: ['Music', 'Movies', 'Vsauce'],
   createdAt: Date.now(),
-  users: [{ id: 'ADMINYY', nickname: 'Posh', joinedAt: Date.now() }],
+  users: [user1],
 };

@@ -2,6 +2,7 @@ import http from 'http';
 import socket from 'socket.io';
 
 import { events } from './constants/socket';
+import { getServerStats } from './socket/controllers/stat';
 import { handleSocketConnection } from './socket/controllers/core';
 
 const IO = socket({
@@ -21,5 +22,9 @@ const attachSocket = (app, callback) => {
 
   return server;
 };
+
+setInterval(() => {
+  IO.emit(events.SERVER_INFO, getServerStats());
+}, 5000);
 
 export { IO as default, attachSocket };

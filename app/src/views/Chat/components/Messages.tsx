@@ -22,7 +22,7 @@ const Messages = (props: any): any => {
   return (
     <List
       className={className}
-      style={{ height: extended ? '100vh' : '72vh', overflowY: 'auto' }}
+      style={{ height: extended ? '100vh' : '69vh', overflowY: 'auto' }}
     >
       {items.map((message: any, index: number) => (
         <Message

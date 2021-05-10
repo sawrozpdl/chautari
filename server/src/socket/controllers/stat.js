@@ -4,6 +4,8 @@ import { isBanned } from '../models/server';
 import { getRoom, getStats } from '../models/room';
 import { leaveRoomForUser } from '../services/roomChat';
 import { events, userStatus } from '../../constants/socket';
+import { getStats as getRoomStats } from '../models/room';
+import { getStats as getUserStats } from '../models/user';
 import { leaveRandomChatForUser } from '../services/randomChat';
 import { getUser, logoutUser, registerUser, updateUser } from '../models/user';
 
@@ -16,7 +18,7 @@ export const connect = (data, socket) => {
 
 export const update = (data, socket) => {
   const { id: userId } = socket;
-  updateUser(userId, data);
+  updateUser(userId, data, false);
 };
 
 const _leaveInvolvedRoom = (socket, userId, consented) => {
@@ -51,4 +53,11 @@ export const disconnect = (_, socket, { consented }) => {
       _leaveInvolvedRoom(socket, userId, consented);
     }
   });
+};
+
+export const getServerStats = () => {
+  return {
+    rooms: getRoomStats(),
+    users: getUserStats(),
+  };
 };

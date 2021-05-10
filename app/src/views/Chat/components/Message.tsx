@@ -3,6 +3,7 @@ import moment from 'moment';
 
 import { ListItem, Grid, ListItemText, Typography } from '@material-ui/core';
 
+import { ImageView } from '../../../components';
 import Markdown from '../../../components/Markdown';
 import { detectProfanity } from '../../../services/ai';
 
@@ -42,6 +43,7 @@ const Message = (props: any): any => {
     censor = false,
     showTime = true,
     isMd,
+    isGif,
     isInfo,
     component: Component,
     ...rest
@@ -50,7 +52,7 @@ const Message = (props: any): any => {
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    if (!isInfo && censor) {
+    if (!isInfo && !isGif && censor) {
       detectProfanity(data).then((dta) => {
         setMessage(dta.filtered);
       });
@@ -83,22 +85,31 @@ const Message = (props: any): any => {
             </Grid>
           )}
           <Grid item xs={12} style={showTime ? {} : { marginBottom: '-16px' }}>
-            <ListItemText
-              primary={
-                <Typography variant="h3">
-                  {' '}
-                  {message ? (
-                    isMd && !censor ? (
-                      <Markdown text={message} />
+            {isGif ? (
+              <ImageView
+                style={{ marginTop: '6px' }}
+                src={message || undefined}
+                title={message || ''}
+                size={300}
+              />
+            ) : (
+              <ListItemText
+                primary={
+                  <Typography variant="h3">
+                    {' '}
+                    {message ? (
+                      isMd && !censor ? (
+                        <Markdown text={message} />
+                      ) : (
+                        message
+                      )
                     ) : (
-                      message
-                    )
-                  ) : (
-                    '...'
-                  )}
-                </Typography>
-              }
-            />
+                      '...'
+                    )}
+                  </Typography>
+                }
+              />
+            )}
           </Grid>
           {time && showTime && (
             <Grid

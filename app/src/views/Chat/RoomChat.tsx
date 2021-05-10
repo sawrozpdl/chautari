@@ -1,14 +1,7 @@
 import React, { useMemo, useEffect, useState } from 'react';
 
 import PropTypes from 'prop-types';
-import {
-  Container,
-  Grid,
-  Avatar,
-  makeStyles,
-  Box,
-  Typography,
-} from '@material-ui/core';
+import { Container, Grid, Avatar, Box, Typography } from '@material-ui/core';
 
 import toast from '../../utils/toast';
 import UserList from './components/UserList';
@@ -112,8 +105,13 @@ const RoomChat: React.FC<any> = (props: any) => {
     };
   }, []);
 
-  const handleMessageSend = (message: string, callback: any): void => {
-    messenger.text(message).md(true);
+  const handleMessageSend = (
+    message: string,
+    callback: any,
+    isMd = false,
+    isGif = false
+  ): void => {
+    messenger[isGif ? 'gif' : 'text'](message).md(isMd);
 
     setMessages((messages) => [...messages, messenger.self(true).build()]);
 
