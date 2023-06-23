@@ -76,7 +76,7 @@ const TabView = (props: any): any => {
           value={value}
           index={index}
           className={classes.tabContent}
-          {...props}
+          {...(props as any)}
           {...other}
         />
       ))}

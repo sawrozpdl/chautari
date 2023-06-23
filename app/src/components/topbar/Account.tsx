@@ -113,11 +113,9 @@ const Account = (props: any): any => {
         >
           {extractInitials(user, false) || 'A'}
         </SmartAvatar>
-        <Hidden smDown>
-          <Typography variant="h5" color="inherit">
-            {settings.nickname}
-          </Typography>
-        </Hidden>
+        <Typography variant="h5" color="inherit">
+          {settings.nickname}
+        </Typography>
       </Box>
       <Menu
         onClose={handleClose}
